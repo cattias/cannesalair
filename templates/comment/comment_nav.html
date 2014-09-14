@@ -1,0 +1,13 @@
+{% if allcomments %}
+<div class="nav_box">
+	<div class="nav_header"><span id="arrow_comment_nav" class="link arrowdown"></span><a href="#">Derniers comment.</a></div>
+	<div class="nav_innerbox" id="comment_nav_inner_box">
+{% for c in allcomments %}
+	<div title="par {{c.auteur.username}} le {{ c.date_publication.date|date:'l d F Y' }} &agrave; {{ c.date_publication.time }} ({{c.get_ref_type|safe}})" 
+		 onclick="javascript:window.location=&quot;{{c.get_ref_url}}&quot;; return false;" 
+		 class="nav_item unselected"><a href="{{c.get_ref_url}}">{{c.get_ref_titre}}</a>
+	</div>
+{% endfor %}
+	</div>
+</div>
+{% endif %}

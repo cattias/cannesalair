@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load forumtags %}
+{% block title %}{{f.titre}}{% endblock %}
+
+{% block content %}
+ <h2>{{ f.titre }}</h2>
+{% if user.is_authenticated %}
+<p class="suggest right"><a class="awesome blue" href="{% url newthread f.titre_slug %}">Proposer une discussion</a></p>
+{% endif %}
+
+<ul class="newslist">
+ {% for t in threads %}
+	<li class="{% cycle 'even' 'odd' %}{% ifequal forloop.counter 1 %} first{% endifequal %}">
+ 	{% threads_entry t %}
+ 	</li>
+ {% endfor %}
+</ul>
+
+{% endblock %}

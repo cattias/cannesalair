@@ -1,0 +1,10 @@
+{% load articletags %}
+{% if alltags %}
+    <tr>
+     <td colspan="2" class="nav_header"><a href="{% url articles %}">Articles par tag</a></td>
+    </tr>
+{% for t in alltags %}
+{%  tags_entry "sub-item" t.name "bytags" t %}
+{% endfor %}
+    <tr><td colspan="2" class="nav_separator"></td></tr>
+{% endif %}

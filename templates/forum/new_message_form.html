@@ -1,0 +1,14 @@
+<script type="text/javascript" src="{{MEDIA_URL}}js/comment_textarea.js?{{MEDIA_SERIAL}}"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/message.js?{{MEDIA_SERIAL}}"></script>
+
+<div id="post_preview" style="display: none;" title="Pr&eacute;visualisation"></div>
+
+<form id="newmessageform" method="POST" action="{% url newmessage t.titre_slug %}">
+ <table>
+    <tbody>
+    {{ form }}
+    </tbody> 
+ </table>
+ <input type="submit" value="Repondre" />
+ <input type="button" id="previewbtn" value="Pr&eacute;visualiser" />
+</form>

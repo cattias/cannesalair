@@ -1,0 +1,14 @@
+{% load photologue_tags %}
+{% if allgalleries %}
+<div class="nav_box">
+	<div class="nav_header">
+		<span id="arrow_gallery_nav" class="link arrowdown"></span>
+		<a href="{% url pl-gallery-list 1 %}">Derni&egrave;res galeries</a>
+	</div>
+	<div class="nav_innerbox" id="gallery_nav_inner_box">
+{% for g in allgalleries %}
+{%  gallery_entry g %}
+{% endfor %}
+	</div>
+</div>
+{% endif %}

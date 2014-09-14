@@ -1,0 +1,30 @@
+
+<div class="pagination">
+    <span class="step-links">
+        {% ifnotequal objects_pagination.number 1 %}
+            <a href="?page=1" title="Premi&egrave;re page"><<</a>
+        {% else %}
+            <<
+        {% endifnotequal %}
+        {% if objects_pagination.has_previous %}
+            <a href="?page={{ objects_pagination.previous_page_number }}" title="Page pr&eacute;c&eacute;dente"><</a>
+        {% else %}
+            <
+        {% endif %}
+
+        <span class="current">
+            Page {{ objects_pagination.number }} / {{ objects_pagination.paginator.num_pages }}
+        </span>
+
+        {% if objects_pagination.has_next %}
+            <a href="?page={{ objects_pagination.next_page_number }}" title="Page suivante">></a>
+        {% else %}
+            >
+        {% endif %}
+        {% ifnotequal objects_pagination.number objects_pagination.paginator.num_pages %}
+            <a href="?page={{ objects_pagination.paginator.num_pages }}" title="Derni&egrave;re page">>></a>
+        {% else %}
+            >>
+        {% endifnotequal %}
+    </span>
+</div>

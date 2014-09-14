@@ -1,0 +1,11 @@
+<div class="sample">
+{% for image in images %}
+	<a href="{{ galerie.get_absolute_url }}">
+		<img alt="{{image.titre}}" src="{{image.get_thumbnail_url}}" />
+	</a>
+{% endfor %}
+</div>
+<div class="samplereadnext">
+	<a class="readnext" title="Parcourir la galerie photos" href="{{ galerie.get_absolute_url }}">la suite ...</a>
+</div>
+	

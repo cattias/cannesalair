@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}{{galerie.titre}}{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="{{MEDIA_URL}}js/comment_textarea.js?{{MEDIA_SERIAL}}"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+	$("#imagelistul").sortable({
+		distance : 10,
+		revert : true,
+		stop : function(event, ui) {
+			$(this).find("li").each(function() {
+				// Update position
+				index = parseInt($(this).index() + 1);
+				$(this).find("input:hidden").val(index);
+			});
+		}
+	});
+	$("#dropzonetodel").droppable({
+		hoverClass : "dropzonered",
+		drop : function(event, ui) {
+			$(ui.draggable).remove();
+		}
+	});
+});
+</script>
+{% endblock %}
+
+{% block content %}
+<h2><a href="{{galerie.get_absolute_url}}">{{ galerie.titre }}</a> {% if canbeedited %}<a onclick="javascript:showModalLoading();" title="Supprimer {{galerie.titre}}" href="{% url deletegalerie galerie.titre_slug %}"><img src="{{MEDIA_URL}}images/icon_deletelink.gif?{{MEDIA_SERIAL}}"></a>{% endif %}</h2>
+
+<div id="edition">
+<h3>Informations de la galerie</h3>
+<form id="editgalerieform" method="POST" action="{% url editgalerie galerie.titre_slug %}">
+    {{ form.as_p }}
+<div id="images">
+<h3>Liste des images de la galerie <img class="help" title="glisser/d&eacute;poser pour changer l'ordre des images" src="{{MEDIA_URL}}css/img/ico-question.png?{{MEDIA_SERIAL}}" /></h3>
+
+<input type="hidden" id="totalphotosnumber" value="{{galerie.photos_set.all|length}}" />
+<ul id="imagelistul" class="nostyle markItUp">
+{% for image in galerie.photos_set.all %}
+	<li>
+		<span class='image'>
+		<img alt="{{image.titre}}" src="{{image.get_thumbnail_url}}" />
+		<input type="hidden" name="order_{{image.id}}" value="{{forloop.counter}}" />
+		</span>
+	</li>
+{% endfor %}
+</ul>
+	<div id="dropzonetodel" class="dropzone">
+		<h1>D&eacute;posez l'image ici pour la supprimer !</h1>
+		<img alt="D&eacute;posez l'image ici pour la supprimer !" src="{{MEDIA_URL}}images/trash.png?{{MEDIA_SERIAL}}"/>
+	</div>
+</div>
+
+<input class="awesome green" type="submit" name="submit" value="Valider" />
+
+</form>
+</div>
+
+{% endblock %}

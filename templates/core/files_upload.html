@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+{% load verbatim %}
+
+{% block title %}Fichiers dispos{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{MEDIA_URL}}multiuploader/css/style.css">
+{% endblock %}
+
+{% block content %}
+	<input id="startorderhidden" value="0" type="hidden"/>
+	<input id="hiddenalbumjson" value="{% url getjsonlistfiles %}" type="hidden"/>
+
+    <!-- The file upload form used as target for the file upload widget -->
+    <form id="fileupload" action="{% url uploadfiles %}" method="POST" enctype="multipart/form-data">
+        <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+        <div class="row fileupload-buttonbar">
+            <div style="width: 100%;">
+                <!-- The fileinput-button span is used to style the file input field as button -->
+                <span class="btn btn-success fileinput-button">
+                    <i class="icon-plus icon-white"></i>
+                    <span>Ajouter des fichiers...</span>
+                    <input type="file" name="files" multiple>
+                </span>
+                <button type="submit" class="btn btn-primary start">
+                    <i class="icon-upload icon-white"></i>
+                    <span>Commencer l'upload</span>
+                </button>
+                <button type="reset" class="btn btn-warning cancel">
+                    <i class="icon-ban-circle icon-white"></i>
+                    <span>Annuler l'upload</span>
+                </button>
+                <button type="button" class="btn btn-danger delete">
+                    <i class="icon-trash icon-white"></i>
+                    <span>Supprimer</span>
+                </button>
+                <input type="checkbox" class="toggle">
+            </div>
+            <div style="width: 100%;">
+                <!-- The global progress bar -->
+                <div class="progress progress-success progress-striped active fade">
+                    <div class="bar" style="width:0%;"></div>
+                </div>
+            </div>
+        </div>
+        <!-- The table listing the files available for upload/download -->
+        <table class="table table-striped"><tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody></table>
+    </form>
+    <br>
+    <div class="well">
+        <h3 class="infoup">Infos</h3>
+        <ul>
+            <li>La taille maximale des fichiers est de <strong>10 MB</strong>.</li>
+            <li>Vous pouvez <strong>glisser et d&eacute;placer</strong> les fichiers depuis votre bureau sur cette page avec Google Chrome, Mozilla Firefox et Apple Safari.</li>
+        </ul>
+    </div>
+
+{% verbatim %}
+<script id="template-upload" type="text/x-jquery-tmpl">
+    <tr class="template-upload">
+		<input class="hiddenordre" type="hidden" name="ordre_${name}" value="${ordref}" />
+        <td class="preview"><span class=""></span></td>
+        <td class="name"><span>${name}</span></td>
+        <td class="size"><span>${sizef}</span></td>
+        {{if error}}
+            <td class="" colspan="2">
+				<span class="label label-important">Erreur:</span>&nbsp;
+                	{{if error === 'maxFileSize'}}Le fichier est trop gros
+                	{{else error === 'minFileSize'}}Le fichier est trop petit
+                	{{else error === 'acceptFileTypes'}}Ce type de fichier est interdit
+                	{{else error === 'maxNumberOfFiles'}}Le nombre max de fichiers est d&eacute;pass&eacute;
+                	{{else}}${error}
+                	{{/if}}
+			</td>
+        {{else}}
+            <td>
+                <div class="progress progress-success progress-striped active"><div class="bar" style="width:0%;"></div></div>
+            </td>
+            <td class="start">
+                <button class="btn btn-primary">
+                    <i class="icon-upload icon-white"></i>
+                    <span>Start</span>
+                </button>
+            </td>
+        {{/if}}
+        <td class="cancel">
+            <button class="btn btn-warning">
+                <i class="icon-ban-circle icon-white"></i>
+                <span>Cancel</span>
+            </button>
+        </td>
+    </tr>
+</script>
+<script id="template-download" type="text/x-jquery-tmpl">
+    <tr class="template-download">
+        {{if error}}
+            <td></td>
+            <td class="name"><span>${name}</span></td>
+            <td class="size"><span>${sizef}</span></td>
+            <td class="" colspan="2">
+				<span class="label label-important">Erreur:</span>&nbsp;
+                {{if error === 1}}Le fichier est trop gros
+                {{else error === 2}}Le fichier est trop gros
+                {{else error === 3}}Le fichier a &eacute;t&eacute; partiellement upload&eacute;
+                {{else error === 4}}Aucun fichier n'a &eacute;t&eacute; upload&eacute;
+                {{else error === 5}}Le r&eacute;pertoire temporaire n'existe pas
+                {{else error === 6}}Impossible d'&eacute;crire sur le disque
+                {{else error === 7}}L'upload a &eacute;t&eacute; stopp&eacute;
+                {{else error === 'maxFileSize'}}Le fichier est trop gros
+                {{else error === 'minFileSize'}}Le fichier est trop petit
+                {{else error === 'acceptFileTypes'}}Ce type de fichier est interdit
+                {{else error === 'maxNumberOfFiles'}}Le nombre max de fichiers est d&eacute;pass&eacute;
+                {{else error === 'uploadedBytes'}}Le nombre de bytes upload&eacute;s est trop grand
+                {{else error === 'emptyResult'}}Le fichier upload&eacute; est vide
+                {{else}}${error}
+                {{/if}}
+			</td>
+        {{else}}
+            <td class="preview">
+				{{if thumbnail_url}}
+                	<a href="${url}" title="${name}" rel="gallery" download="${name}"><img src="${thumbnail_url}"></a>
+            	{{/if}}
+			</td>
+            <td class="name">
+                <a href="${url}" title="${name}" download="${name}"{{if thumbnail_url}} target="_blank"{{/if}}>${name}</a>
+            </td>
+            <td class="size"><span>${sizef}</span></td>
+            <td colspan="2"></td>
+        {{/if}}
+        <td class="delete">
+            <button class="btn btn-danger" data-type="${delete_type}" data-url="${delete_url}">
+                <i class="icon-trash icon-white"></i>
+                <span>Delete</span>
+            </button>
+            <input type="checkbox" name="delete" value="1">
+        </td>
+    </tr>
+</script>
+{% endverbatim %}
+
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
+<script src="{{MEDIA_URL}}multiuploader/js/jquery.iframe-transport.js"></script>
+<script src="{{MEDIA_URL}}multiuploader/js/jquery.fileupload.js"></script>
+<script src="{{MEDIA_URL}}multiuploader/js/jquery.fileupload-ui.js"></script>
+<script src="{{MEDIA_URL}}multiuploader/js/application.js"></script>
+
+{% endblock %}

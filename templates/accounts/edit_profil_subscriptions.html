@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Mes Abonnements{% endblock %}
+
+{% block content %}
+<div class="profil">
+	<h2>Mes Abonnements</h2>
+	<h3 id="articles">Les Articles</h3>
+	<ul>
+	{% for a in user.get_profile.articles.all %}
+	<li><a title="{{a.titre}}" href="{{a.get_absolute_url}}">{{a.titre}}</a> <a title="Se d&eacute;sabonner" href="{% url unsubscribearticle a.titre_slug %}?next_page={% url editprofilsubscriptions %}#articles" class="awesome red ultratiny right">se d&eacute;sabonner</a></li>
+	{% endfor %}
+	</ul>
+	
+	<h3 id="sorties">Les Activit&eacute;s</h3>
+	<ul>
+	{% for s in user.get_profile.sorties.all %}
+	<li><a title="{{s.titre}}" href="{{s.get_absolute_url}}">{{s.titre}}</a> <a title="Se d&eacute;sabonner" href="{% url unsubscribesortie s.titre_slug %}?next_page={% url editprofilsubscriptions %}#sorties" class="awesome red ultratiny right">se d&eacute;sabonner</a></li>
+	{% endfor %}
+	</ul>
+
+	<h3 id="discussions">Les Discussions</h3>
+	<ul>
+	{% for t in user.get_profile.discussions.all %}
+	<li><a title="{{t.titre}}" href="{{t.get_absolute_url}}">{{t.titre}}</a> <a title="Se d&eacute;sabonner" href="{% url unsubscribethread t.titre_slug %}?next_page={% url editprofilsubscriptions %}#discussions" class="awesome red ultratiny right">se d&eacute;sabonner</a></li>
+	{% endfor %}
+	</ul>
+
+	<h3 id="galeries">Les Galeries</h3>
+	<ul>
+	{% for g in user.get_profile.galeries.all %}
+	<li><a title="{{g.titre}}" href="{{g.get_absolute_url}}">{{g.titre}}</a> <a title="Se d&eacute;sabonner" href="{% url unsubscribegalerie g.imgur_id %}?next_page={% url editprofilsubscriptions %}#galeries" class="awesome red ultratiny right">se d&eacute;sabonner</a></li>
+	{% endfor %}
+	</ul>
+
+</div>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Profil de {{profil.user.username}}{% endblock %}
+
+{% if profil %}
+{% block content %}
+
+
+<div class="profil">
+    <img class="avatar right" alt="" src="{{profil.get_avatar_full_url}}">
+	<h2>{{profil.user.username}}</h2>
+    
+        
+	<h3>Dans la vraie vie</h3>
+    <ul>
+    <li>Nom : {{profil.user.first_name}} {{profil.user.last_name}}</li>
+    <li>Lieu : {{profil.lieu}}</li>
+    {% if profil.siteweb %}
+	<li><a href="{{profil.siteweb}}">{{profil.siteweb}}</a></li>
+	{% endif %}
+	</ul>
+      
+  
+    <h3>Sur le Site des CAL</h3>
+    <ul>
+    	<li class="ico-arrow">Inscrit depuis le {{profil.user.date_joined.date|date:"l d F Y"}}</li>
+		<li class="ico-arrow">{{profil.user.auteur_message_set.all.count}} messages sur le <a href="{% url groupes %}">forum</a></li>
+		<li class="ico-arrow">{{profil.user.comment_auteur_set.all.count}} commentaires</li>
+		<li class="ico-arrow" id="showdocs-actu"><a href="{% url articles %}?auteur={{profil.user.pk}}">{{profil.user.auteur_set.all.count}} Articles</a>
+		<li class="ico-arrow" id="showdocs-actu"><a href="{% url sorties %}?auteur={{profil.user.pk}}">{{profil.user.sortie_auteur_set.all.count}} Sorties propos&eacute;es</a>
+	</ul>
+  </div>
+
+{% endblock %}
+{% endif %}

@@ -1,0 +1,12 @@
+{% load forumtags %}
+
+ <div class="message">
+  <a name="message{{m.pk}}">
+    <div class="messageheader"><span style="float: right;">#{{ rang }}</span>le {{ m.date_publication.date|date:"l d F Y" }} &agrave; {{ m.date_publication.time }}</div>
+    <div class="messagetopleft">{% include "accounts/profil.html" %}</div>
+    <div class="messagetopright">{{ m.contenu|safe }}</div>
+    <div class="clearer"></div>
+    <div class="messagebottomleft"><div></div>  </div>
+    <div class="messagebottomright">{% if p.signature %}<br/>--<br/>{{ p.signature|safe }}{% endif %}</div>
+  </a>
+ </div>

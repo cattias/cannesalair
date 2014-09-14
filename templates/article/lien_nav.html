@@ -1,0 +1,12 @@
+{% load articletags %}
+{% if allliens %}
+    <tr>
+     <td colspan="2" class="nav_header">Liens{% if perms.article.add_lien %}<span style="float: right; font-size: 10px"><a href="{% url addlien %}">(+)</a></span>{% endif %}</td>
+    </tr>
+{% for l in allliens %}
+    <tr onclick="javascript:window.location=&quot;{{ l.url }}&quot;; return false;" class="unselected">
+     <td colspan="2" class="summary sub-item"><a href="{{ a.url }}" title="{{ l.description }}">{{ l.titre }}</a></td>
+    </tr>
+{% endfor %}
+    <tr><td colspan="2" class="nav_separator"></td></tr>
+{% endif %}

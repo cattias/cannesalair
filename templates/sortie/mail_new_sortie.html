@@ -1,0 +1,6 @@
+{% load preferencestags %}
+<p>Bonjour {{ profil.username }},</p>
+<p>Vous recevez ce mail car vous avez demand&eacute; &agrave; &ecirc;tre notifi&eacute; lorsqu'une nouvelle activit&eacute; est propos&eacute;e sur le site {% tp "site" "name2" %}.</p>
+<p><strong>{{ sortie.auteur.username }}</strong> a propos&eacute; l'activit&eacute; <a href="http://{{ domain }}{{ sortie.get_absolute_url }}">{{ sortie.titre }}</a>, {% if sortie.date_debut.date == sortie.date_fin.date %}le {{sortie.date_debut|date:"l d F Y"}} {% if sortie.date_debut|time:"H:i" != "00:00" %}de {{sortie.date_debut|time:"H:i"}} &agrave; {{sortie.date_fin|time:"H:i"}}{% endif %}{% else %}du {{sortie.date_debut|date:"l d F Y"}} au {{sortie.date_fin|date:"l d F Y"}}{% endif %}</p>
+<p>Vous pouvez demander &agrave; ne plus &ecirc;tre notifi&eacute; <a href="http://{{ domain }}{% url editprofil %}">ici</a>.</p>
+<p>Merci d'utiliser notre site.<br> - {% tp "site" "sign" %} -</p>

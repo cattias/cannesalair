@@ -1,0 +1,15 @@
+{% load meteotags %}
+{%if nexturl%}
+<img alt="next" title="Pr&eacute;vision suivante" class="tooltip arrow arrowright" src="{{MEDIA_URL}}css/img/arrow_right.png" onclick="javascript:$('#blocmeteo').load('{{nexturl}}');">
+{%endif%}
+{%if previousurl%}
+<img alt="previous" title="Pr&eacute;vision pr&eacute;c&eacute;dente" class="tooltip arrow arrowleft" src="{{MEDIA_URL}}css/img/arrow_left.png" onclick="javascript:$('#blocmeteo').load('{{previousurl}}');">
+{%endif%}
+<img alt="" width="10%" class="illust" src="{{MEDIA_URL}}css/img/meteo.png">
+{%if previsions%}
+<h2><a href="{% url listprevi %}">Pr&eacute;visions</a> {{previsions.0.date_previ|date:"l d F"}}</h2>
+{% previ_encart previsions %}
+{%else%}
+<h2>Pas de pr&eacute;vision</h2>
+{%endif%}
+<div class="clear"></div>

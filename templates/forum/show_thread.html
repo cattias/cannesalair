@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}{{thread.titre}}{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="{{MEDIA_URL}}js/comment_textarea.js?{{MEDIA_SERIAL}}"></script>
+{% endblock %}
+
+{% block content %}
+ <h2><a href="{{ thread.forum.get_absolute_url }}">{{thread.forum.titre}}</a> &raquo; {{ thread.titre }}</h2>
+
+{% if user.is_authenticated and not urlretour %}
+ <p>
+ {% if issubscribed %}
+  Si vous voulez <a href="{% url unsubscribethread thread.titre_slug %}">ne plus suivre cette discussion</a>.
+ {% else %}
+  Si vous voulez <a href="{% url subscribethread thread.titre_slug %}">suivre cette discussion</a>.
+ {% endif %}
+ </p>
+{% endif %}
+
+<div id="commentaires">
+{% for message in listmessages %}
+<div id="com{{message.pk}}" class="commentaire {% cycle 'even' 'odd' %}">
+<p class="commentaire-date">
+<span class="commentaire-auteur">
+<a title="{{message.auteur.username}}" href="{% url viewprofil user_pk=message.auteur.pk %}">{{ message.auteur.username }}</a> a dit le {{ message.date_publication.date|date:"l d F Y" }} &agrave; {{ message.date_publication.time }}
+</span>
+<span class="right"><b>#{{forloop.counter}}</b></span>
+</p>
+
+<div class="commentaire-meta">
+{{ message.auteur.get_profile.get_html_avatar|safe }}
+</div> 
+
+<div class="commentaire-content">
+<p>{{ message.contenu|safe }}</p>
+{% if message.auteur.get_profile.signature %}<div class="signature">{{ message.auteur.get_profile.signature|urlize|safe|linebreaksbr }}</div>{% endif %}
+</div>
+
+<div class="commentaire-bottom"></div>
+</div>
+{% endfor %}
+</div>
+
+{% if urlretour %}
+<div id="commentaires">
+<form method="POST" action="{{urlretour}}" >
+	<input type="hidden" name="editpreview" value="True" />
+	<input type="hidden" name="titre" value="{{thread.titre}}" />
+	<input type="hidden" name="auteur" value="{{user.pk}}" />
+	<input type="hidden" name="forum" value="{{thread.forum.pk}}" />
+	<input type="hidden" name="contenu" value="{{messagesuppl.contenu}}" />
+ 	<input class="awesome orange" type="submit" value="Retour &agrave; l'&eacute;dition" />
+</form>
+</div>
+{% else %}
+<div id="commentaires-posting">
+{% if user.is_authenticated %}
+<h3 class="posting">R&eacute;pondre</h3>
+<form method="post" action="{% url newmessage thread.titre_slug %}">
+	<p><textarea title="Entrez votre message" class="input-maxi" rows="10" cols="80" name="contenu" id="newmessage">{% if contenu %}{{contenu|safe}}{% endif %}</textarea>
+	<input name="auteur" value="{{user.pk}}" type="hidden"></p>
+	<input class="awesome green" value="Envoyer" type="submit">
+	<input class="awesome orange" type="submit" name="preview" id="previewbtn" value="Pr&eacute;visualiser" />
+</form>
+{% endif %}
+</div>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,3 @@
+{% if qspertag %}<br>Tags :
+{% for t in qspertag %}{% ifnotequal forloop.counter 1 %}, {% endifnotequal %}{{t|safe}}{% endfor %}
+{% endif %}

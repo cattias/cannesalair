@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% load commenttags %}
+{% block title %}Download Galerie{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="{{MEDIA_URL}}js/dl_galerie.js?{{MEDIA_SERIAL}}"></script>
+{% endblock %}
+
+{% block content %}
+<h2><a href="{{galerie.get_absolute_url}}">{{ galerie.titre }}</a></h2>
+
+<div class="auteur ">
+   	{{ galerie.auteur.get_profile.get_html_avatar|safe }}
+	<p>Galerie photos par <a title="{{galerie.auteur.username}}" href="{% url viewprofil user_pk=galerie.auteur.pk %}">{{ galerie.auteur.username }}</a>
+	<span class="edit"></span>
+	<br>
+	<span class="meta">
+		Le {{ galerie.date_publication.date|date:"l d F Y" }} &agrave; {{ galerie.date_publication.time }}
+    </span>
+	</p>
+</div>
+<div class="auteur-end"></div>
+<p class="suggestbottom right">
+	<span title="Tout s&eacute;lectionner" class="awesome green" onclick="javascript:selection_full();">Tout s&eacute;lectionner</span>
+	<span title="Tout d&eacute;s&eacute;lectionner" class="awesome red" onclick="javascript:selection_empty();">Tout d&eacute;s&eacute;lectionner</span>
+</p>
+
+<p>{{galerie.description|safe}}</p>
+
+<p class="warn">
+Pour t&eacute;l&eacute;charger des photos d'une galerie vous devez choisir vos photos en cliquant sur celles de votre choix (ou en cliquant sur &laquo;Tout s&eacute;l&eacute;ctionner&raquo;)<br>
+Ensuite saisissez une adresse email valide ou le lien de t&eacute;l&eacute;chargement des photos que vous avez choisies vous sera envoy&eacute;.<br>
+Attention ce lien de t&eacute;l&eacute;chargement n'est valable qu'un mois. 
+</p>
+
+<div class="embed" id="offsite">
+
+<ul id="imagelistul" class="nostyle markItUp">
+{% for image in galerie.photos_set.all %}
+	<li>
+		<img class="unselected" onclick="javascript:selection(this);" alt="{{image.titre}}" src="{{image.get_thumbnail_url}}" />
+		<input type="hidden" name="imageid" value="{{image.id}}">
+	</li>
+{% endfor %}
+</ul>
+
+</div>
+
+<div id="validation">
+<form id="choixphotosform" method="POST" action="{% url downloadgalerie galerie.titre_slug %}">
+{{form.as_p}}
+<ul></ul>
+<input class="awesome green" type="submit" name="submit" value="Valider" onclick="javascript:showModalLoading();$('#choixphotosform').submit();"/>
+</form>
+</div>
+
+{% endblock %}

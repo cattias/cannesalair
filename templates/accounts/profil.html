@@ -1,0 +1,13 @@
+{% if p %}
+<dl>
+	<dt><strong><a href="{% url viewprofil user_pk=p.user.pk %}">{{ p.user.username }}</a></strong></dt>
+	<dd>{% include "accounts/avatar.html" %}</dd>
+	<dd>Date d'inscription: {{ p.date_creation.date|date:"d/m/Y" }}</dd>
+	<dd>Messages: {{ messagescount }}</dd>
+	<dd>
+	{% if p.siteweb %}
+	   <a href="{{ p.siteweb }}">Site web</a>
+	{% endif %}
+	</dd>
+</dl>
+{% endif %}

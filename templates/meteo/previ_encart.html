@@ -1,0 +1,23 @@
+<ul>
+{% for previ in previsions %}
+<li>
+	<a title="{{previ.sources|safe}}" class="tooltip" href="{{ previ.get_absolute_url }}">{{ previ.auteur.username }}, le {{ previ.date_creation|date:"l d F Y" }} &agrave; {{ previ.date_creation|time:"H:i" }}</a>
+	<ul>
+	{%for note in previ.prevision_notes_set.all%}
+		<li>{{note}}</li>
+	{%endfor%}
+	</ul>
+	<p style="clear: both; margin-bottom: 0;"><strong>Pr&eacute;vision</strong> : </p>
+	<span class="safep">{{previ.description|safe}}</span>
+	{% if previ.annexe %}
+	<p style="clear: both; margin-bottom: 0;">Plus de d&eacute;tails <strong><a href="{{ previ.get_absolute_url }}">ici</a></strong>.</p>
+	{% endif %}
+</li>
+{% endfor %}
+</ul>
+
+<script>
+$(document).ready(function(){
+	$(".tooltip").simpletooltip();
+});
+</script>

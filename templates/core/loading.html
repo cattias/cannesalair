@@ -1,0 +1,44 @@
+<div id="loading_bg">&nbsp;</div id="loading_bg">
+<div id="loading"><h1>Please Wait...</h1><img src="{{MEDIA_URL}}images/bar.gif" /></div>
+<script>
+
+$(document).ready(function() {
+        jQuery.fn.centerScreen = function(loaded) {
+                var obj = this;
+                if(!loaded) {
+                        obj.css('top', $(window).scrollTop() + $(window).height()/2-this.height()/2-50);
+                        obj.css('left', $(window).width()/2-this.width()/2);
+                        $(window).resize(function()
+			{ obj.centerScreen(!loaded); });
+			                } else {
+			                        obj.stop();
+			                        obj.animate({ top: $(window).scrollTop() + $(window).height()/2-
+			this.height()/2, left: $
+			(window).width()/2-this.width()/2}, 200, 'linear');
+			                }
+        }
+			
+	    $(window).scroll(function () {  
+	        $('#loading').css({'top': $(window).scrollTop() + $(window).height()/2 - $('#loading').height()/2-50});  
+	        $('#loading_bg').css({'top': $(window).scrollTop() + $(window).height()/2 - $('#loading_bg').height()/2});  
+	    });
+	    
+        $('#loading').css({'top': $(window).scrollTop() + $(window).height()/2 - $('#loading').height()/2-50});  
+        $('#loading_bg').css({'top': $(window).scrollTop() + $(window).height()/2 - $('#loading_bg').height()/2});  
+	    
+}); 
+
+
+function showLoading(){
+	$('#loading').centerScreen();
+	$('#loading').css('display','block');
+}
+function showModalLoading(){
+	$('#loading_bg').css('display','block');
+	showLoading();
+}
+function hideLoading(){
+	$('#loading').css('display','none');
+	$('#loading_bg').css('display','none');
+}
+</script>

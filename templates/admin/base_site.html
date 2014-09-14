@@ -1,0 +1,17 @@
+{% extends "admin/base.html" %}
+{% load preferencestags %}
+
+{% block title %}{{ title }} | {% tp "site" "name_short" %} site admin{% endblock %}
+
+{% block userlinks %}
+<a href="/">Back to {% tp "site" "name_short" %}</a> /
+<a href="{% url site_setup %}">Site Setup</a> /
+<a href="{% url changepassword %}">Change password</a> /
+<a href="{% url logout %}">Log out</a>
+{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">{% tp "site" "short" %} administration</h1>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

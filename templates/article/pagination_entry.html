@@ -1,0 +1,26 @@
+
+<p class="pagination">
+	<span>
+	    <a href="?page=1" title="Premi&egrave;re page">D&eacute;but</a>
+	</span>
+
+	{% if objects_pagination.has_previous %}
+	    <a href="?page={{ objects_pagination.previous_page_number }}" title="Page pr&eacute;c&eacute;dente"><</a>
+	{% endif %}
+	
+	{% for i in paginator.page_range %}
+		{% ifequal i objects_pagination.number %}
+		<b>{{i}}</b>
+		{% else %}
+		<a href="?page={{i}}" title="Page {{i}}">{{i}}</a>
+		{% endifequal %}
+	{% endfor %}
+	
+	{% if objects_pagination.has_next %}
+	    <a href="?page={{ objects_pagination.next_page_number }}" title="Page suivante">></a>
+	{% endif %}
+	
+	<span>
+	    <a href="?page={{ objects_pagination.paginator.num_pages }}" title="Derni&egrave;re page">Fin</a>
+	</span>
+</p>

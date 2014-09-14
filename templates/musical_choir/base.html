@@ -1,0 +1,23 @@
+{% extends 'root.base.html' %}
+
+{% block newmember-intro %}
+<div class="bloc newmember-intro">
+	<h2>La Cl&eacute; des Chants, <span>C'est quoi ?</span></h2>
+	<p><a href="{% url aboutus %}" accesskey="0">(en savoir plus...)</a></p>
+</div>
+{% endblock %}
+
+{% block footer %}
+<div id="footer"{% if full %} class="full"{% endif %}>
+<ul id="footer-links">
+	<li><a href="http://fr.wikipedia.org/wiki/Brouckerque">Brouckerque (Wikipedia)</a></li>
+</ul>
+</div>
+<div id="footer-menu">
+<ul>
+	<li><a href="{% url contactus %}" accesskey="7" title="Contactez-nous">Contactez-nous</a></li>
+	<li><a href="{% url aboutus %}" accesskey="0" title="Pr&eacute;sentation du Club">Pr&eacute;sentation du Club</a></li>
+	<li class="gopagetop"><a href="#evitement">Haut&nbsp;de&nbsp;page <img src="{{MEDIA_URL}}css/img/ico-up.png" alt=""></a></li>
+</ul>
+</div>
+{% endblock %}

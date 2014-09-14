@@ -1,0 +1,12 @@
+	<span class="titre">
+		<a title="{{ t.titre }}" href="{{ t.get_absolute_url }}">
+			{{ t.titre }}
+		</a>
+	</span>
+	<span class="meta">
+	par {{ auteur.username }}
+	<br>{{ totalreponses }} r&eacute;ponses
+	{% if derniermessage %}
+	<br>Dernier message le {{ derniermessage.date_publication.date|date:"l d F Y" }} &agrave; {{ derniermessage.date_publication.time }} par {{ derniermessage.auteur.username }}
+	{% endif %}
+	</span>

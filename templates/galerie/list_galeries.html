@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load coretags %}
+{% load galerietags %}
+{% block title %}Galeries{% endblock %}
+
+{% block content %}
+
+{% if user.is_authenticated %}
+<p><a class="awesome blue" href="{% url addgalerie %}">Cr&eacute;er une nouvelle galerie d'images</a></p>
+{% endif %}
+
+<div class="yearblock">
+<h2>{{year}}</h2>
+</div>
+
+{% for g in galeries %}
+	<div class="newsblock{% ifequal forloop.counter 1 %} first{% endifequal %}">
+		<h3 class="title">
+	        <a href="{{ g.get_absolute_url }}">{{ g.titre }}</a>
+	    </h3>
+	    
+	    <div class="meta">
+	    	<span class="metafirst">
+	    	par 
+	    	{{ g.auteur.username }} 
+	    	le  {{ g.date_publication.date|date:"l d F Y" }} - <strong>{{g.photos_set.all|length}} photos</strong>
+	    	</span>
+	    	<a class="hometip comc" href="{{ g.get_absolute_url }}#commentaires" title="{{g.comments.all.count}} commentaires">{{g.comments.all|length}} commentaires</a>
+	    </div>
+	    {% apercu_galerie g %}
+	</div>
+{% endfor %}
+
+<p class="pagination">
+{% for y in years %}
+	<a{% if year == y %} class="active"{% endif %} title="{{y}}" href="{% url galeries %}?year={{y}}">{{y}}</a>
+{% endfor %}
+</p>
+
+{% endblock %}

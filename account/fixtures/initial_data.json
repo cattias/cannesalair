@@ -1,0 +1,10 @@
+[
+  {
+    "model": "account.profil",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "date_creation": "2012-01-01 00:00"
+    }
+  }
+]

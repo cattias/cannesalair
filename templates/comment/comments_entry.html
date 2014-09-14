@@ -1,0 +1,39 @@
+<div id="commentaires">
+<h3>Commentaires</h3>
+{% for comment in comments %}
+<div id="com{{comment.pk}}" class="commentaire {% cycle 'even' 'odd' %}">
+<p class="commentaire-date">
+<span class="commentaire-auteur">
+<a title="{{comment.auteur.username}}" href="{% url viewprofil user_pk=comment.auteur.pk %}">{{ comment.auteur.username }}</a> a dit le {{ comment.date_publication.date|date:"l d F Y" }} &agrave; {{ comment.date_publication.time }}
+{% if user == comment.auteur or user.is_superuser %}
+<a title="Supprimer le commentaire" href="{% url deletecomment comment.pk %}"><img alt="" src="{{MEDIA_URL}}images/icon_deletelink.gif?{{MEDIA_SERIAL}}"></a>
+{% endif %}
+</span>
+</p>
+
+<div class="commentaire-meta">
+{{ comment.auteur.get_profile.get_html_avatar|safe }}
+</div> 
+
+<div class="commentaire-content">
+<p>{{ comment.contenu|urlize|safe|linebreaksbr }}</p>
+</div>
+
+<div class="commentaire-bottom"></div>
+</div>
+{% endfor %}
+</div>
+<div id="commentaires-posting">
+{% if user.is_authenticated %}
+<h3 class="posting">Laisser un commentaire</h3>
+<form method="post" action="{% url newcomment type=type pk=pk %}">
+	<p>
+		<textarea title="Entrez votre commentaire" class="input-maxi" rows="6" cols="40" name="contenu" id="commentaire"></textarea>
+		<input name="auteur" value="{{user.pk}}" type="hidden">
+	</p>
+	<p>
+		<input class="awesome green" value="Envoyer" type="submit">
+	</p>
+</form>
+{% endif %}
+</div>

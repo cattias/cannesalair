@@ -1,0 +1,195 @@
+{% extends "base.html" %}
+{% load preferencestags %}
+{% load commenttags %}
+{% load sortietags %}
+{% load galerietags %}
+{% block title %}{{ sortie.titre }}{% endblock %}
+
+{% block css %}
+	<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block content %}
+
+{% if user.is_authenticated and not urlretour %}
+<p class="suggest right">Participer : 
+	<a title="Je participe" class="awesome tooltip green{%if maparticipation and maparticipation.statut == "oui" %} large{%endif%}" href="{% url participersortie sortie.titre_slug %}">Oui</a> 
+	<a title="J'h&eacute;site" class="awesome tooltip yellow{%if maparticipation and maparticipation.statut == "peutetre" %} large{%endif%}" href="{% url participerpeutetresortie sortie.titre_slug %}">Peut-&ecirc;tre</a> 
+	<a title="Je ne peux pas j'ai piscine" class="awesome tooltip red{%if maparticipation and maparticipation.statut == "non" %} large{%endif%}" href="{% url annulerparticipersortie sortie.titre_slug %}">Non</a>
+	<span title="Je veux ajouter un invit&eacute; qui n'est pas inscrit sur le site !" class="awesome tooltip green" onclick="javascript:showpopupparticipant();">+</span>
+	<div title="Ajout d'un invit&eacute;" id="spformdivid" style="display: none;">
+		<form id="spformid" method="POST" action="{{sortie.get_absolute_url}}">
+			{{ spform.as_p }}
+			<input class="awesome small green" type="submit" name="submit" onclick="javascript:$('#hiddeninputstatusid').val('oui');" value="Il/Elle participe !" />
+			<input class="awesome small orange" type="submit" name="submit" onclick="javascript:$('#hiddeninputstatusid').val('peutetre');" value="Il/Elle h&eacute;site encore ..." />
+			<input id="hiddeninputstatusid" type="hidden" name="statut" value="" />
+		</form>
+	</div>
+</p>
+{% endif %}
+<h2 class="doc-title">
+	{%if sortie.canceled%}<strong>[Annul&eacute;{%if sortie.typesortie.name != "Stage"%}e{%endif%}]</strong> {%endif%}{{ sortie.titre }}{% if not urlretour %}{% if user == sortie.auteur or user.is_superuser %} <a title="Supprimer {{sortie.titre}}" href="{% url deletesortie sortie.titre_slug %}"><img alt="" src="{{MEDIA_URL}}images/icon_deletelink.gif?{{MEDIA_SERIAL}}"></a>{% endif %}{% endif %}
+</h2>
+
+{% if user.is_authenticated and not urlretour %}
+ <p>
+ {% if issubscribed %}
+  Si vous voulez <a href="{% url unsubscribesortie sortie.titre_slug %}">ne plus suivre cette activit&eacute;</a>.
+ {% else %}
+  Si vous voulez <a href="{% url subscribesortie sortie.titre_slug %}">suivre cette activit&eacute;</a>.
+ {% endif %}
+ </p>
+{% endif %}
+
+   <div class="auteur ">
+   	{{ sortie.auteur.get_profile.get_html_avatar|safe }}
+	<p>{{sortie.typesortie.name}} par <a title="{{sortie.auteur.username}}" href="{% url viewprofil user_pk=sortie.auteur.pk %}">{{ sortie.auteur.username }}</a> &agrave; {{sortie.lieu}} {% if sortie.date_debut.date == sortie.date_fin.date %}le {{sortie.date_debut|date:"l d F Y"}} {% if sortie.date_debut|time:"H:i" != "00:00" %}de {{sortie.date_debut|time:"H:i"}} &agrave; {{sortie.date_fin|time:"H:i"}}{% endif %}{% else %}du {{sortie.date_debut|date:"l d F Y"}} au {{sortie.date_fin|date:"l d F Y"}}{% endif %}
+	<span class="edit">{% if canbeedited %}<a title="Editer l'activit&eacute;" href="{% url editsortie sortie.titre_slug %}">{% endif %}<img alt="Editer l'activit&eacute;" src="{{MEDIA_URL}}css/img/picto-edit.png" />{% if canbeedited %}</a>{% endif %}</span>
+     	<span class="meta">
+     		<p><a href="#participants">Participants (invit&eacute;s inclus)</a> : {{totalsur}} participant(s) s&ucirc;r(s){% if totalpe %}, {{totalpe}} participant(s) h&eacute;sitant(s){% endif %}</p>
+     		{% if sortie.cr and sortie.cr.nb_participants_effectifs %}
+     		<p><a href="#participants">Participants effectifs (d'apr&egrave;s le compte-rendu)</a> : {{sortie.cr.nb_participants_effectifs}} participant(s)</p>
+     		{% endif %}
+     		{% if not urlretour %}
+     		{% sortie_categories_entry sortie %}
+     		{% else %}
+     		{% if categories %}
+     		<p>Cat&eacute;gories : {{categories|join:", "}}</p>
+     		{% endif %}
+     		{% endif %}
+		{% if sortie.rdv %}<p>RDV {{sortie.rdv}}</p>{% endif %}
+     	</span>
+     	</p>
+   </div>
+   <div class="auteur-end"></div>
+<p class="suggestbottom right">
+   	{% if canbeedited %}
+	{%if sortie.canceled%}<a title="Annuler l'annulation" class="awesome green" href="{% url uncancelsortie sortie.titre_slug %}">Annuler l'annulation</a>{%else%}<a title="Annuler l'activit&eacute;" class="awesome red" href="{% url cancelsortie sortie.titre_slug %}">Annuler l'activit&eacute;</a>{%endif%}
+	<a title="Editer l'activit&eacute;" class="awesome yellow" href="{% url editsortie sortie.titre_slug %}">Editer l'activit&eacute;</a>
+	{% endif %}
+	{% if caneditcr %}
+		{% if crsortie %}
+			<a title="Editer le compte-rendu" class="awesome blue" href="{% url editsortiecr sortie.titre_slug %}">Editer le compte-rendu</a>
+		{% else %}
+			<a title="Saisir le compte-rendu" class="awesome blue" href="{% url editsortiecr sortie.titre_slug %}">Saisir le compte-rendu</a>
+		{% endif %} 
+	{% endif %} 
+</p>
+
+<div id="description" class="doc-content">
+	<h3>Description</h3>
+	<p>{{ sortie.description|safe }}</p>  
+</div>
+
+<div id="participants" class="doc-content">
+	{% if poui or pnon or ppe %}
+	<h3>Liste des participants</h3>
+	{% if poui %}
+	<p>Ils ont dit oui ({{pouicount}}) : {% for p in poui %}{%if forloop.counter != 1%}, {%endif%}<a class="tooltip" title="{{p.qui.username}}" href="{% url viewprofil p.qui.pk %}">{{p.qui.username}}</a>{% endfor %}</p>
+	{% endif %}
+	{% if ppe %}
+	<p>Ils ont dit peut-&ecirc;tre ({{ppecount}}) : {% for p in ppe %}{%if forloop.counter != 1%}, {%endif%}<a class="tooltip" title="{{p.qui.username}}" href="{% url viewprofil p.qui.pk %}">{{p.qui.username}}</a>{% endfor %}</p>
+	{% endif %}
+	{% if pnon %}
+	<p>Ils ont dit non ({{pnoncount}}) : {% for p in pnon %}{%if forloop.counter != 1%}, {%endif%}<a class="tooltip" title="{{p.qui.username}}" href="{% url viewprofil p.qui.pk %}">{{p.qui.username}}</a>{% endfor %}</p>
+	{% endif %}
+	{% endif %}
+
+	{% if spoui or sppe %}
+	<h3>Liste des invit&eacute;s</h3>
+	{% if spoui %}
+	<p>Ils ont dit oui ({{spouicount}}) : {% for p in spoui %}{%if forloop.counter != 1%}, {%endif%}{% if user == sortie.auteur or user.is_superuser %}<a title="{{p.email}}" class="tooltip" href="mailto:{{p.email}}">{% endif %}{{p.nom}}{% if user == sortie.auteur or user.is_superuser %}</a>{% endif %} ({{p.qui.username}}){% endfor %}</p>
+	{% endif %}
+	{% if sppe %}
+	<p>Ils ont dit peut-&ecirc;tre ({{sppecount}}) : {% for p in sppe %}{%if forloop.counter != 1%}, {%endif%}{% if user == sortie.auteur or user.is_superuser %}<a title="{{p.email}}" class="tooltip" href="mailto:{{p.email}}">{% endif %}{{p.nom}}{% if user == sortie.auteur or user.is_superuser %}</a>{% endif %} ({{p.qui.username}}){% endfor %}</p>
+	{% endif %}
+	{% endif %}
+	
+	{% if mesinvites %}
+	<h3>Liste de mes invit&eacute;s</h3>
+	<ul>
+	{% for i in mesinvites %}
+	<li>{{i.nom}} ({{i.email}}): {% if i.statut == "oui" %}Oui, <a title="Finalement l'invit&eacute; h&eacute;site toujours ..." class="tooltip" href="{% url changespecialparticipant i.id %}?statut=peutetre">Peut-&ecirc;tre</a>{% else %}<a title="Finalement l'invit&eacute; vient !" class="tooltip" href="{% url changespecialparticipant i.id %}?statut=oui">Oui</a>, Peut-&ecirc;tre{% endif %}, <a title="Finalement l'invit&eacute; ne vient plus." class="tooltip" href="{% url changespecialparticipant i.id %}?statut=non">Non</a></li>
+	{% endfor %}
+	</ul>
+	{% endif %}
+</div>
+
+{% if crsortie %}
+<div id="compterendu" class="doc-content">
+	<h2>Compte-Rendu par {{crsortie.auteur}}</h2>
+	{% if canviewspecificcr %}
+	<p><ul>
+	{% if crsortie.nb_participants_effectifs %}<li>Nombre de participants effectifs : {{ crsortie.nb_participants_effectifs }}</li>{% endif %}  
+	{% if crsortie.participants_effectifs %}<li>Participants effectifs : {{ crsortie.participants_effectifs }}</li>{% endif %}  
+	{% if crsortie.kilometrage %}<li>Kilom&eacute;trage : {{ crsortie.kilometrage }} kms</li>{% endif %}  
+	{% if crsortie.peages %}<li>P&eacute;ages : {{ crsortie.peages }} &euro;</li>{% endif %}  
+	{% if crsortie.nb_voitures %}<li>Nombre de voitures : {{ crsortie.nb_voitures }}</li>{% endif %}  
+	</ul></p>
+	{% endif %}
+	<p>{{ crsortie.compterendu|safe }}</p>
+</div>
+{% endif %}
+
+{% if sortie.sortie_galeries_set.all %}
+<div id="galeries">
+	<h2>Galeries associ&eacute;es</h2>
+	{% for g in sortie.sortie_galeries_set.all %}
+		<h3><a href="{{g.get_absolute_url}}">{{g.titre}}</a></h3>
+		{% apercu_galerie g %}
+	{% endfor %}
+</div>
+{% endif %}
+
+{% if urlretour %}
+<div id="commentaires">
+{% if crsortie %}
+<form method="POST" action="{{urlretour}}" >
+	<input type="hidden" name="editpreview" value="True" />
+	<input type="hidden" name="auteur" value="{{crsortie.auteur.pk}}" />
+	<input type="hidden" name="compterendu" value="{{crsortie.compterendu}}" />
+	{% if crsortie.kilometrage %}<input type="hidden" name="kilometrage" value="{{crsortie.kilometrage}}" />{% endif %}
+	{% if crsortie.peages %}<input type="hidden" name="peages" value="{{crsortie.peages}}" />{% endif %}
+	{% if crsortie.nb_voitures %}<input type="hidden" name="nb_voitures" value="{{crsortie.nb_voitures}}" />{% endif %}
+	<input type="hidden" name="participants_effectifs" value="{{crsortie.participants_effectifs}}" />
+ 	<input class="awesome orange" type="submit" value="Retour &agrave; l'&eacute;dition" />
+</form>
+{% else %}
+<form method="POST" action="{{urlretour}}" >
+	<input type="hidden" name="editpreview" value="True" />
+	<input type="hidden" name="auteur" value="{{sortie.auteur.pk}}" />
+	<input type="hidden" name="titre" value="{{sortie.titre}}" />
+	<input type="hidden" name="description" value="{{sortie.description}}" />
+	<input type="hidden" name="lieu" value="{{sortie.lieu}}" />
+	<input type="hidden" name="rdv" value="{{sortie.rdv}}" />
+	<input type="hidden" name="typesortie" value="{{sortie.typesortie.pk}}" />
+	<input type="hidden" name="date_debut" value="{{sortie.date_debut|date:'Y-m-d'}}" />
+	<input type="hidden" name="date_fin" value="{{sortie.date_fin|date:'Y-m-d'}}" />
+	{% for c in categories %}
+	<input type="hidden" name="activites" value="{{c.pk}}" />
+	{% endfor %}
+ 	<input class="awesome orange" type="submit" value="Retour &agrave; l'&eacute;dition" />
+</form>
+{% endif %}
+</div>
+{% else %}
+{% comments_entry 'sortie' sortie.pk sortie.comments.all %}
+{% endif %}
+
+<script>
+function showpopupparticipant() {
+	$('#spformdivid').dialog({
+		bgiframe : true,
+		width : 800,
+		modal : true,
+		autoOpen : false
+		});
+	$('#spformdivid').dialog('open');
+	return true;
+}
+
+$(document).ready(function(){
+	{% if spform.errors %}showpopupparticipant();{% endif %}
+});
+</script>
+{% endblock %}

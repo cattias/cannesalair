@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% load commenttags %}
+{% block title %}{{galerie.titre}}{% endblock %}
+
+{% block css %}
+	<link rel="stylesheet" href="{{MEDIA_URL}}blueimp/Bootstrap-Image-Gallery/css/bootstrap-image-gallery.min.css">
+{% endblock %}
+
+{% block content %}
+<h2>{{ galerie.titre }}{% if canbeedited %} <a onclick="javascript:showModalLoading();" title="Supprimer {{galerie.titre}}" href="{% url deletegalerie galerie.titre_slug %}"><img src="{{MEDIA_URL}}images/icon_deletelink.gif?{{MEDIA_SERIAL}}"></a>{% endif %}</h2>
+
+{% if user.is_authenticated %}
+ <p>
+ {% if issubscribed %}
+  Si vous voulez <a href="{% url unsubscribegalerie galerie.titre_slug %}">ne plus suivre cette galerie</a>.
+ {% else %}
+  Si vous voulez <a href="{% url subscribegalerie galerie.titre_slug %}">suivre cette galerie</a>.
+ {% endif %}
+ </p>
+{% endif %}
+
+<div class="auteur ">
+   	{{ galerie.auteur.get_profile.get_html_avatar|safe }}
+	<p>Galerie de {{galerie.photos_set.all|length}} photos par <a title="{{galerie.auteur.username}}" href="{% url viewprofil user_pk=galerie.auteur.pk %}">{{ galerie.auteur.username }}</a>{% if galerie.sortie %}, lors de la sortie <a href="{{galerie.sortie.get_absolute_url}}">{{galerie.sortie.titre}} ({% if galerie.sortie.date_debut.date == galerie.sortie.date_fin.date %}le {{galerie.sortie.date_debut|date:"l d F Y"}} {% if galerie.sortie.date_debut|time:"H:i" != "00:00" %}de {{galerie.sortie.date_debut|time:"H:i"}} &agrave; {{galerie.sortie.date_fin|time:"H:i"}}{% endif %}{% else %}du {{galerie.sortie.date_debut|date:"l d F Y"}} au {{galerie.sortie.date_fin|date:"l d F Y"}}{% endif %})</a>{% endif %}
+	<span class="edit">{% if canbeedited %}<a title="Editer la galerie" href="{% url editgalerie galerie.titre_slug %}">{% endif %}<img alt="Editer la galerie" src="{{MEDIA_URL}}css/img/picto-edit.png" />{% if canbeedited %}</a>{% endif %}</span>
+	<br>
+	<span class="meta">
+		Le {{ galerie.date_publication.date|date:"l d F Y" }} &agrave; {{ galerie.date_publication.time }}
+    </span>
+	</p>
+</div>
+<div class="auteur-end"></div>
+<p class="suggestbottom right">
+	<a title="T&eacute;l&eacute;charger des photos de la galerie" class="tooltip awesome green" href="{% url downloadgalerie galerie.titre_slug %}">T&eacute;l&eacute;charger des photos de la galerie</a>
+{% if canbeedited %}
+	<a title="Ajouter des photos" class="tooltip awesome yellow" href="{% url uploadgalerie galerie.titre_slug %}">Ajouter des photos</a>
+	<a title="Editer la galerie" class="tooltip awesome blue" href="{% url editgalerie galerie.titre_slug %}">Editer la galerie</a>
+	<a title="Titre et Description des photos" class="tooltip awesome red" href="{% url updatephotos galerie.titre_slug %}">Titre et Description des photos</a>
+{% endif %}
+</p>
+
+<div id="desccontent">
+<p>{{galerie.description|safe}}</p>
+</div>
+
+<div class="embed" id="offsite">
+
+	<!-- modal-gallery is the modal dialog used for the image gallery -->
+	<div id="modal-gallery" class="modal modal-gallery hide fade">
+	    <div class="modal-header">
+	        <a class="close" data-dismiss="modal">&times;</a>
+	        <h3 class="modal-title"></h3>
+	    </div>
+	    <div class="modal-body"><div class="modal-image"></div></div>
+	    <div class="modal-footer">
+	        <a class="btn modal-download" target="_blank"><i class="icon-download"></i> Download</a>
+	        <a class="btn btn-success modal-play modal-slideshow" data-slideshow="5000"><i class="icon-play icon-white"></i> Slideshow</a>
+	        <a class="btn btn-info modal-prev"><i class="icon-arrow-left icon-white"></i> Previous</a>
+	        <a class="btn btn-primary modal-next">Next <i class="icon-arrow-right icon-white"></i></a>
+	    </div>
+	</div>
+	
+	<div id="gallery" data-toggle="modal-gallery" data-target="#modal-gallery">
+	{% for image in galerie.photos_set.all %}
+    	<a href="{{image.get_imgur_huge_url}}" rel="gallery" title="{% if image.titre %}{{image.titre}}{% else %}{{image.filename}}{% endif %}{% if image.description %} - {{image.description}}{% endif %}"><img src="{{image.get_thumbnail_url}}" /></a>
+	{% endfor %}
+	</div>
+
+</div>
+
+{% comments_entry 'galerie' galerie.pk galerie.comments.all %}
+
+
+<script src="{{MEDIA_URL}}blueimp/bootstrap/js/bootstrap.min.js"></script>
+<script src="{{MEDIA_URL}}blueimp/Bootstrap-Image-Gallery/js/load-image.js"></script>
+<script src="{{MEDIA_URL}}blueimp/Bootstrap-Image-Gallery/js/bootstrap-image-gallery.min.js"></script>
+
+{% endblock %}

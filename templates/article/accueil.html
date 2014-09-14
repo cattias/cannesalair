@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load coretags %}
+{% load preferencestags %}
+
+{% block title %}{% tp "site" "name" %}{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="{{MEDIA_URL}}js/article.js?{{MEDIA_SERIAL}}"></script>
+{% endblock %}
+
+{% block content %}
+ {% for article in articles %}
+
+	<div class="newsblock{% ifequal forloop.counter 1 %} first{% endifequal %}">
+		<h2 class="title">
+	        <a href="{{ article.get_absolute_url }}">{{ article.titre }}</a>
+	    </h2>
+	    
+	    <div class="meta">
+	    	<span class="metafirst">
+	    	par 
+	    	{{ article.auteur.username }} 
+	    	le  {{ article.date_publication.date|date:"l d F Y" }} &agrave; {{ article.date_publication.time }}
+	    	</span>
+	    	<a class="hometip comc" href="{{ article.get_absolute_url }}#commentaires" title="{{article.comments.all.count}} commentaires">{{article.comments.all.count}} commentaires</a>
+	    </div>
+	    {{ article.auteur.get_profile.get_html_illustration|safe }}
+	    <div class="texte">
+	    <p>{{ article.contenu|resume|safe }}</p>
+	    <a class="readnext" title="Lire la suite de {{ article.titre }}" href="{{ article.get_absolute_url }}">Lire la suite &raquo;</a>
+	    </div>
+	</div>
+
+ {% endfor %}
+
+<p class="pagination">
+{% for y in years %}
+	<a{% if year == y %} class="active"{% endif %} title="{{y}}" href="{% url root %}?year={{y}}">{{y}}</a>
+{% endfor %}
+</p>
+
+{% endblock %}

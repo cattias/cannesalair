@@ -1,0 +1,30 @@
+    {{ sortie.auteur.get_profile.get_html_illustration|safe }}
+	<span class="titre">
+		<a title="{{ sortie.titre }}" href="{{ sortie.get_absolute_url }}">
+			{{ sortie.titre }}
+		</a>
+		{%if maparticipation and maparticipation.statut == "oui"%}<img style="margin:0; float:none;" alt="" title="Je participe !" class="tooltip" src="{{MEDIA_URL}}images/star_on.png">{%endif%}
+		{%if maparticipation and maparticipation.statut == "non"%}<img style="margin:0; float:none;" alt="" title="Je ne peux pas participer car je suis naze, j'ai piscine ..." class="tooltip" src="{{MEDIA_URL}}images/icon_deletelink.gif">{%endif%}
+		{%if maparticipation and maparticipation.statut == "peutetre"%}<img style="margin:0; float:none;" alt="" title="Je ne sais pas encore si je participe ou pas, faudrait que je me d&eacute;cide ..." class="tooltip" src="{{MEDIA_URL}}css/img/ico-question.png">{%endif%}
+	</span>
+	<p class="suggest right">
+		<a class="awesome small {{color}} datesortie center" href="{{ sortie.get_absolute_url }}">{{ sortie.date_debut.date|date:"l d F Y" }}{% if dureesortie %}<br>{{dureesortie}} jour(s){% endif %}</a>
+		{% if sortie.cr %}
+		<br><br><a title="Compte-rendu de {{sortie.titre}}" class="tooltip awesome tiny yellow center" href="{{ sortie.get_absolute_url }}#compterendu">CR</a>
+		{% endif %}
+		{% if sortie.canceled %}
+		{% if not sortie.cr %}<br><br>{% endif %}<a title="{{sortie.titre}} est annul&eacute;{%if sortie.typesortie.name != "Stage"%}e{%endif%}" class="tooltip awesome tiny redflash center" href="{{ sortie.get_absolute_url }}">Annul&eacute;{%if sortie.typesortie.name != "Stage"%}e{%endif%}</a>
+		{% endif %}
+	</p>
+	<span class="meta">
+		{{sortie.typesortie.name}} par {{ sortie.auteur.username }}, <a href="{{ sortie.get_absolute_url }}#commentaires" title="Commentaires de {{sortie.titre}}" class="tooltip">{{sortie.comments.all.count}} commentaires</a>
+		{% if sortie.cr and sortie.cr.nb_participants_effectifs %}
+		<br><a title="Participants de {{sortie.titre}}" class="tooltip" href="{{ sortie.get_absolute_url }}#participants">{{sortie.cr.nb_participants_effectifs}} participants effectifs</a>
+		{% else %}
+		<br><a title="Participants de {{sortie.titre}}" class="tooltip" href="{{ sortie.get_absolute_url }}#participants">{{totalsur}} participants{%if totalpe%} (+{{totalpe}} ont r&eacute;pondu peut-&ecirc;tre){%endif%}</a>
+		{% endif %}
+		{% if qspertag %}<br>Cat&eacute;gories :
+		{% for t in qspertag %}{% ifnotequal forloop.counter 1 %}, {% endifnotequal %}{{t|safe}}{% endfor %}
+		{% endif %}
+	</span>
+	

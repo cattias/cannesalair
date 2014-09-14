@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load meteotags %}
+{% block title %}Pr&eacute;visions{% endblock %}
+
+{% block content %}
+<h2>Liste des pr&eacute;visions &agrave; venir{% if auteur %} propos&eacute;e par {{auteur.username}}{% endif %}</h2>
+
+{% if perms.account.can_view_secure_files or user.is_superuser %}
+<p class="suggest right"><a class="awesome blue" href="{% url addprevi %}">Proposer une pr&eacute;vision</a></p>
+{% endif %}
+<p>{{previavenircount}} pr&eacute;visions &agrave; venir</p>
+
+<ul class="newslist">
+ {% for previ in previavenir %}
+	<li class="{% cycle 'even' 'odd' %}{% ifequal forloop.counter 1 %} first{% endifequal %}">
+ 	{% previ_resume_entry previ "green" %}
+ 	</li>
+ {% endfor %}
+</ul>
+
+
+<h2>Liste des pr&eacute;visions pass&eacute;es{% if auteur %} propos&eacute;e par {{auteur.username}}{% endif %}</h2>
+
+<p>{{previpasseescount}} derni&egrave;res pr&eacute;visions</p>
+
+<ul class="newslist">
+ {% for previ in previpassees %}
+	<li class="{% cycle 'even' 'odd' %}{% ifequal forloop.counter 1 %} first{% endifequal %}">
+ 	{% previ_resume_entry previ "orange" %}
+ 	</li>
+ {% endfor %}
+</ul>
+
+<p class="pagination">
+	<a{% if view == "all" %} class="active"{% endif %} href="{% url listprevi %}?view=all">Toutes</a>
+{% for y in years %}
+	<a{% if year == y %} class="active"{% endif %} title="{{y}}" href="{% url listprevi %}?year={{y}}">{{y}}</a>
+{% endfor %}
+</p>
+
+{% endblock %}

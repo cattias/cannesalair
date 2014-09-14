@@ -1,0 +1,12 @@
+	<span class="titre">
+		<a title="{{ f.titre }}" href="{{ f.get_absolute_url }}">
+			{{ f.titre }}
+		</a>
+	</span>
+	<span class="meta">
+	{{ f.commentaire|safe|linebreaksbr }}
+	<br>{{ totalthreads }} discussions, {{ totalmessages }} messages
+	{% if derniermessage %}
+	<br>Dernier message le {{ derniermessage.date_publication.date|date:"l d F Y" }} &agrave; {{ derniermessage.date_publication.time }} par {{ derniermessage.auteur.username }}
+	{% endif %}
+	</span>

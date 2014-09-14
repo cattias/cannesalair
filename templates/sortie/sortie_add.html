@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load articletags %}
+{% block title %}Proposer une activit&eacute;{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="{{MEDIA_URL}}js/comment_textarea.js?{{MEDIA_SERIAL}}"></script>
+{% endblock %}
+
+{% block content %}
+<h2>Proposer une activit&eacute;</h2>
+
+<p class="warn">
+Commencez la r&eacute;daction de l'activit&eacute; avec un petit paragraphe (en passant &agrave; la ligne pour la suite de l'activit&eacute;) qui r&eacute;sume son contenu.<br>En effet ce premier paragraphe sera ensuite r&eacute;utilis&eacute; comme aper&ccedil;u du contenu de l'activit&eacute;.
+</p>
+
+<form id="addsortieform" method="POST" action="{% url addsortie %}">
+    {{ form.as_p }}
+	<input class="awesome green" type="submit" name="submit"  value="Ajouter" />
+	<input class="awesome orange" type="submit" name="preview" id="previewbtn" value="Pr&eacute;visualiser" />
+</form>
+{% endblock %}

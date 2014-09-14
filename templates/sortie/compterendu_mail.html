@@ -1,0 +1,7 @@
+{% load preferencestags %}
+<p>Bonjour {{ profil.username }},</p>
+<p><strong>{{ user.username }}</strong> a ajout&eacute; un compte-rendu &agrave; <a href="http://{{ domain }}{{ sortie.get_absolute_url }}">{{ sortie.titre }}</a></p>
+<p>Vous pouvez le visualiser <a href="http://{{ domain }}{{ sortie.get_absolute_url }}#compterendu">ici</a>.</p>
+<p>{{ sortie.cr.compterendu|safe }}</p>
+<p>Vous pouvez demander &agrave; ne plus &ecirc;tre notifi&eacute; <a href="http://{{ domain }}{% url editprofil %}">ici</a>.</p>
+<p>Merci d'utiliser notre site.<br> - {% tp "site" "sign" %} -</p>

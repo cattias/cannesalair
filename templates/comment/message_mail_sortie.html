@@ -1,0 +1,6 @@
+{% load preferencestags %}
+<p>Bonjour {{ profil.username }},</p>
+<p><strong>{{ comment.auteur.username }}</strong> a comment&eacute; sur <a href="http://{{ domain }}{{ sortie.get_absolute_url }}#commentaires-posting">{{ sortie.titre }}</a>, {% if sortie.date_debut.date == sortie.date_fin.date %}le {{sortie.date_debut|date:"l d F Y"}} {% if sortie.date_debut|time:"H:i" != "00:00" %}de {{sortie.date_debut|time:"H:i"}} &agrave; {{sortie.date_fin|time:"H:i"}}{% endif %}{% else %}du {{sortie.date_debut|date:"l d F Y"}} au {{sortie.date_fin|date:"l d F Y"}}{% endif %} :<br>
+{{ comment.contenu|urlize|safe|linebreaksbr }}</p>
+<p>Vous pouvez demander &agrave; ne plus &ecirc;tre notifi&eacute; <a href="http://{{ domain }}{% url unsubscribesortie sortie.titre_slug %}">ici</a>.</p>
+<p>Merci d'utiliser notre site.<br> - L'&eacute;quipe des {% tp "site" "name_short" %} -</p>

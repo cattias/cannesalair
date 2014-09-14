@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load commenttags %}
+{% load articletags %}
+{% block title %}{{ article.titre }}{% endblock %}
+
+{% block content %}
+<div class="actualite">
+	<h2 class="doc-title">{{ article.titre }} {% if user == article.auteur or user.is_superuser %}<a title="Supprimer {{article.titre}}" href="{% url deletearticle article.titre_slug %}"><img alt="" src="{{MEDIA_URL}}images/icon_deletelink.gif?{{MEDIA_SERIAL}}"></a>{% endif %}</h2>
+
+{% if user.is_authenticated and not urlretour %}
+ <p>
+ {% if issubscribed %}
+  Si vous voulez <a href="{% url unsubscribearticle article.titre_slug %}">ne plus suivre cet article</a>.
+ {% else %}
+  Si vous voulez <a href="{% url subscribearticle article.titre_slug %}">suivre cet article</a>.
+ {% endif %}
+ </p>
+{% endif %}
+
+    <div class="auteur ">
+    	{{ article.auteur.get_profile.get_html_avatar|safe }}
+		<p>Article par <a title="{{article.auteur.username}}" href="{% url viewprofil user_pk=article.auteur.pk %}">{{ article.auteur.username }}</a>
+		<span class="edit">{% if canbeedited %}<a title="Editer l'article" href="{% url editarticle article.titre_slug %}">{% endif %}<img alt="Editer l'article" src="{{MEDIA_URL}}css/img/picto-edit.png" />{% if canbeedited %}</a>{% endif %}</span>
+		<br>
+      	<span class="meta">
+      		Mis &agrave; jour le {{ date_publication.date|date:"l d F Y" }} &agrave; {{ date_publication.time }}
+      		{% article_tags_entry article %}
+      	</span>
+      	</p>
+    </div>
+    <div class="auteur-end"></div>
+    {% if canbeedited %}
+	<p class="suggestbottom right">
+		<a title="Editer l'article" class="awesome yellow" href="{% url editarticle article.titre_slug %}">Editer l'article</a>
+	</p>
+	{% endif %}
+ 
+	<div class="doc-content">
+		<p>{{ article.contenu|safe }}</p>  
+	</div> <!-- doc-content -->
+
+
+</div>
+
+{% if urlretour %}
+<form method="POST" action="{{urlretour}}" >
+	<input type="hidden" name="editpreview" value="True" />
+	<input type="hidden" name="auteur" value="{{article.auteur.pk}}" />
+	<input type="hidden" name="titre" value="{{article.titre}}" />
+	<input type="hidden" name="contenu" value="{{article.contenu}}" />
+	<input type="hidden" name="tags" value="{{article.tags}}" />
+ 	<input class="awesome orange" type="submit" value="Retour &agrave; l'&eacute;dition" />
+</form>
+{% else %}
+{% comments_entry 'article' article.pk article.comments.all %}
+{% endif %}
+
+{% endblock %}

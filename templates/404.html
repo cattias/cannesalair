@@ -1,0 +1,86 @@
+{% load preferencestags %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
+ <head>
+  <meta name="google-site-verification" content="laYWafHsDoPWTrgUlHcl-fwiLxLNQMZ068uwT1y4Msg" />
+  <link rel="icon" 
+      type="image/png" 
+      href="{{MEDIA_URL}}images/favicon.png?{{MEDIA_SERIAL}}">
+  <title>La page n'existe pas | {% tp "site" "name_short" %}</title>
+	<link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}css/styles.css?{{MEDIA_SERIAL}}" />
+
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.4.4.min.js"></script>
+	<script type="text/javascript">
+	  var _gaq = _gaq || [];
+	  _gaq.push(['_setAccount', '{{siteconfig.settings.google_analytics_account}}']);
+	  _gaq.push(['_trackPageview']);
+	
+	  (function() {
+	    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+	    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+	    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	  })();
+	</script>
+ </head>
+ <body>
+	<div id="header">
+		<div id="header-inside">
+			<ul id="evitement"></ul>
+			<h1 id="title"><a href="{% url root %}"><img src="{{MEDIA_URL}}images/cal_logo.png?{{MEDIA_SERIAL}}" title="{% tp "site" "name" %}" alt="{% tp "site" "name" %}"/></a></h1>
+		</div>
+	</div>
+	
+	<div id="sous-menu" class="full">
+		<a id="rss" href="{% url feedarticles 'latest' %}"><img heught="30" width="30" title="Suivez le fil RSS" alt="Suivez le fil RSS" src="{{MEDIA_URL}}css/img/sous-menu-rss.png?{{MEDIA_SERIAL}}"/></a>
+		{% block search %}
+		<form id="recherche" action="{% url search %}" id="cse-search-box">
+		  <div>
+		  	<label for="recherche-texte">
+		    <input type="hidden" name="cx" value="partner-pub-2431559297372197:mpz9egys90s" />
+		    <input type="hidden" name="cof" value="FORID:10" />
+		    <input type="hidden" name="ie" value="ISO-8859-1" />
+		    <input type="text" onfocus="if(value=='recherche') this.value='';" title="recherche" value="recherche" name="q" id="recherche-texte" style="color: rgb(102, 102, 102);" />
+		    </label>
+		    <input type="submit" id="recherche-submit" name="sa" value="OK" />
+		  </div>
+		</form>
+		<script type="text/javascript" src="http://www.google.fr/cse/brand?form=cse-search-box&amp;lang=fr"></script>
+		{% endblock %}
+		
+		<ul id="navbar">
+			<li class="homeitem"><b><a href="{% url root %}"><img height="10" width="10" alt="Accueil" src="{{MEDIA_URL}}css/img/picto-home.png?{{MEDIA_SERIAL}}" /></a></b></li>
+			<li class="item {{tab_article}}"><b><a href="{% url articles %}">Articles</a></b></li>
+			<li class="item {{tab_activite}}">
+				<b><a href="{% url sorties %}">Activit&eacute;s</a></b>
+				<a href="{% url calendarsorties %}" title="Calendrier des activit&eacute;s"><img src="{{MEDIA_URL}}images/calendar-day.png?{{MEDIA_SERIAL}}" title="Calendrier des activit&eacute;s" /></a>
+			</li>
+			<li class="item {{tab_galerie}}"><b><a href="{% url galleries %}">Galeries</a></b></li>
+			<li class="item {{tab_forum}}"><b><a href="{% url groupes %}">Forum</a></b></li>
+     	</ul>
+	</div>
+	
+	<div id="header-sep">
+		<div class="inside">&nbsp;</div>
+	</div>
+	
+	<div id="global">
+		<div id="page" class="full">
+			<div id="content" class="fullcontent">
+			<h2>Bin oui la page que tu demandes n'existe pas ...</h2>
+			</div>
+			<div id="footer" class="full"></div>
+			<div id="footer-menu">
+			<ul>
+				<li><a href="{% url contactus %}" accesskey="7" title="Contactez-nous">Contactez-nous</a></li>
+				<li><a href="{% url aboutus %}" accesskey="0" title="Pr&eacute;sentation du Club">Pr&eacute;sentation du Club</a></li>
+				<li class="gopagetop"><a href="#evitement">Haut&nbsp;de&nbsp;page <img src="{{MEDIA_URL}}css/img/ico-up.png" alt=""></a></li>
+			</ul>
+			</div>
+			<div id="footer-end">
+			</div>
+			<div id="footer-mobile"></div>
+		</div>
+	</div>
+ </body>
+</html>

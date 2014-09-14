@@ -1,0 +1,13 @@
+{% if comment %}
+ <div class="news">
+    <div class="news_header">Par <a href="{% url viewprofil user_pk=comment.auteur.pk %}">{{ comment.auteur.username }}</a>, le {{ comment.date_publication.date|date:"l d F Y" }} &agrave; {{ comment.date_publication.time }}
+        {% ifequal comment.auteur user %}
+            <span style="float: right;"><div class="link linktodeletecomment" id="{{comment.pk}}"><img src="{{MEDIA_URL}}images/icon_deletelink.gif?{{MEDIA_SERIAL}}" title="Suppression du commentaire" /></div></span>
+        {% else %}{% if user.is_staff %}
+            <span style="float: right;"><div class="link linktodeletecomment" id="{{comment.pk}}"><img src="{{MEDIA_URL}}images/icon_deletelink.gif?{{MEDIA_SERIAL}}" title="Suppression du commentaire" /></div></span>
+        {% endif %}
+        {% endifequal %}
+    </div>
+    <p>{{ comment.contenu|safe|linebreaksbr }}</p>
+ </div>
+{% endif %}

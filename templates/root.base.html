@@ -1,0 +1,186 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+{% load coretags %}
+{% load preferencestags %}
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
+ <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width" />
+  <meta name="google-site-verification" content="laYWafHsDoPWTrgUlHcl-fwiLxLNQMZ068uwT1y4Msg" />
+  <meta name="detectify-verification" content="bba4aa8f6152f83f76ef6cadb391ee74" />
+  <link rel="icon" type="image/png" href="{{MEDIA_URL}}images/favicon.png?{{MEDIA_SERIAL}}" />
+  <title>{% block title %}{% endblock %} | {% tp "site" "name_short" %}</title>
+    {% block extrahead %}{% endblock %}
+	<script type="text/javascript">
+	  var AJAX_SERIAL = "{{AJAX_SERIAL}}";
+	  var MEDIA_SERIAL = "{{MEDIA_SERIAL}}";
+	  var MEDIA_URL = "{{MEDIA_URL}}";
+	  var SITE_ROOT = "{{SITE_ROOT}}";
+	  var LOGGED_IN = {% if user.is_authenticated %}true{% else %}false{% endif %};
+	{% block jsconsts %}{% endblock %}
+	</script>
+
+	<link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}blueimp/bootstrap/css/bootstrap.css?{{MEDIA_SERIAL}}" />
+	<link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}css/styles.css?{{MEDIA_SERIAL}}" />
+	<style>
+		body {
+			{% if user.is_authenticated and user.get_profile.custom_background_image %}
+			background-image: url("{{user.get_profile.custom_background_image}}");
+			{% else %}
+			background-image: url("{{siteconfig.settings.site_background_image}}");
+			{% endif %}
+			background-repeat: repeat;
+		}
+	</style>
+	{% block css %}{% endblock %}
+
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="{{MEDIA_URL}}tiny_mce/tiny_mce.js?{{MEDIA_SERIAL}}"></script>
+	<script type="text/javascript" src="{{MEDIA_URL}}js/base.js?{{MEDIA_SERIAL}}"></script>
+	{% block scripts %}{% endblock %}
+	{% if not settings.DEBUG %}
+	<script type="text/javascript">
+	  var _gaq = _gaq || [];
+	  _gaq.push(['_setAccount', '{{siteconfig.settings.google_analytics_account}}']);
+	  _gaq.push(['_setDomainName', '{{siteconfig.settings.google_analytics_domain}}']);
+	  _gaq.push(['_trackPageview']);
+	
+	  (function() {
+	    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+	    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+	    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	  })();
+	</script>
+	{% endif %}
+ </head>
+{% block bodytag %}
+ <body>
+{% endblock %}
+ <div id="fullbody">
+	<div id="header">
+		<div id="header-inside">
+			<ul id="evitement">
+			</ul>
+			<h1 id="title"><a href="{% url root %}"><img src="{{MEDIA_URL}}{% tp "site" "logo" %}?{{MEDIA_SERIAL}}" title="{% tp "site" "name" %}" alt="{% tp "site" "name" %}"/></a></h1>
+			<ul id="menu">
+				{% if user.is_authenticated %}
+				<li><a href="{% url logout %}?next_page={{next_page}}&next_query={{next_query}}" title="D&eacute;connexion">D&eacute;connexion</a></li>
+				{% if user.is_superuser %}
+				<li><a href="/admin" title="Administration">Administration</a></li>
+				{% endif %}
+				{% if perms.account.can_view_secure_files or user.is_superuser %}
+				<li><a href="/core/files" title="Fichiers">Fichiers</a></li>
+				{% endif %}
+				<li><a href="{% url editprofil %}?next_page={{next_page}}&next_query={{next_query}}">Mon profil</a></li>
+				{% else %}
+				<li><a href="{% url login %}?next_page={{next_page}}&next_query={{next_query}}" title="S'identifier">S'identifier</a></li>
+				{% endif %}
+			</ul>
+		</div>
+	</div>
+	
+	<div id="sous-menu"{% if full %} class="full"{% endif %}>
+		{% block search %}
+		<form id="recherche" action="{% url search %}" id="cse-search-box">
+		  <div>
+		    <input type="hidden" name="cx" value="partner-pub-2431559297372197:mpz9egys90s" />
+		    <input type="hidden" name="cof" value="FORID:10" />
+		    <input type="hidden" name="ie" value="ISO-8859-1" />
+		    <input type="text" onfocus="if(value=='recherche') this.value='';" title="recherche" value="recherche" name="q" id="recherche-texte" style="color: rgb(102, 102, 102);" />
+		    <input type="submit" id="recherche-submit" name="sa" value="OK" />
+		  </div>
+		</form>
+		<script type="text/javascript" src="http://www.google.fr/cse/brand?form=cse-search-box&amp;lang=fr"></script>
+		{% endblock %}
+		
+		<ul id="navbar">
+			<li class="homeitem"><b><a href="{% url root %}"><img height="10" width="10" alt="Accueil" src="{{MEDIA_URL}}css/img/picto-home.png?{{MEDIA_SERIAL}}" /></a></b></li>
+			{% if not siteconfig.settings.site_activite_en_premier %}
+			<li class="item {{tab_article}}"><b><a href="{% url articles %}">Articles</a></b></li>
+			{% endif %}
+			<li class="item {{tab_activite}}">
+				<b><a href="{% url sorties %}">Activit&eacute;s</a></b>
+				<a href="{% url calendarsorties %}" title="Calendrier des activit&eacute;s"><img src="{{MEDIA_URL}}images/calendar-day.png?{{MEDIA_SERIAL}}" title="Calendrier des activit&eacute;s" /></a>
+			</li>
+			<li class="item {{tab_galerie}}"><b><a href="{% url galeries %}">Galeries</a></b></li>
+			<li class="item {{tab_forum}}"><b><a href="{% url groupes %}">Forum</a></b></li>
+			{% if siteconfig.settings.site_activite_en_premier %}
+			<li class="item {{tab_article}}"><b><a href="{% url articles %}">Articles</a></b></li>
+			{% endif %}
+			<li class="item {{tab_meteo}}"><b><a href="{% url listprevi %}">M&eacute;t&eacute;o</a></b></li>
+			{% if user.is_authenticated %}<li class="item {{tab_notification}}"><b><a href="{% url viewnotification %}"><img {% if not new_notification %}class="notification" {% endif %}src="{{MEDIA_URL}}images/star_{% if new_notification %}on{% else %}off{% endif %}.png?{{MEDIA_SERIAL}}" title="Notifications" />{% if new_notification %}({{new_notification}}){% endif %}</a></b></li>{% endif %}
+     	</ul>
+	</div>
+	
+	<div id="header-sep">
+		<div class="inside">&nbsp;</div>
+	</div>
+	
+	<div id="global">
+		<div id="page"{% if full %} class="full"{% endif %}>
+			<div id="content"{% if full %} class="fullcontent"{% endif %}>
+			{% block content %}{% endblock %}
+			</div>
+			{% if not full %}
+			<div id="sidebar">
+                <div id="blocmeteo" class="bloc meteo firstbloc">
+                </div>
+                <div class="bloc articles">
+                    <img alt="" class="illust" src="{{MEDIA_URL}}css/img/blockquote1.png">
+                    <h2><a href="{% url articles %}">Articles</a> Nouveaut&eacute;s</h2>
+                    {%for a in latestarticles%}
+                    {%if forloop.counter == 1%}
+                    <p class="dernier"><img title="article" alt="article" src="{{MEDIA_URL}}css/img/doc-article.png"> <a href="{{ a.get_absolute_url }}">{{a.titre}}</a></p>
+                    <p class="description">{{ a.contenu|resume|safe }} <a href="{{ a.get_absolute_url }}">Lire la suite</a></p>
+                    <ul>
+                    {%else%}
+                        <li><img title="article" alt="article" src="{{MEDIA_URL}}css/img/doc-article.png"> <a href="{{ a.get_absolute_url }}">{{a.titre}}</a></li>
+                    {%endif%}
+                    {%endfor%}
+                    </ul>
+                    <div class="clear"></div>
+                </div>
+                <div class="bloc sorties">
+                    <img alt="" class="illust" src="{{MEDIA_URL}}css/img/blockquote2.png">
+                    <h2><a href="{% url sorties %}">Activit&eacute;s</a> Quoi faire ce WE ?</h2>
+                    {%for s in sortiesavenir%}
+                    {%if forloop.counter == 1%}
+                    <p class="dernier"><img title="sortie" alt="sortie" src="{{MEDIA_URL}}css/img/doc-sortie.png"> <a title='{% if s.date_debut.date == s.date_fin.date %}le {{s.date_debut|date:"l d F Y"}} {% if s.date_debut|time:"H:i" != "00:00" %}de {{s.date_debut|time:"H:i"}} &agrave; {{s.date_fin|time:"H:i"}}{% endif %}{% else %}du {{s.date_debut|date:"l d F Y"}} au {{s.date_fin|date:"l d F Y"}}{% endif %}' href="{{ s.get_absolute_url }}">[{{s.date_debut|date:"d/m"}}{% if not s.date_debut.date == s.date_fin.date %}-{{s.date_fin|date:"d/m"}}{% endif %}] {{s.titre}}</a></p>
+                    <p class="description">{{ s.description|resume|safe }} <a href="{{ s.get_absolute_url }}">Lire la suite</a></p>
+                    <ul>
+                    {%else%}
+                        <li><img title="sortie" alt="sortie" src="{{MEDIA_URL}}css/img/doc-sortie.png"> <a title='{% if s.date_debut.date == s.date_fin.date %}le {{s.date_debut|date:"l d F Y"}} {% if s.date_debut|time:"H:i" != "00:00" %}de {{s.date_debut|time:"H:i"}} &agrave; {{s.date_fin|time:"H:i"}}{% endif %}{% else %}du {{s.date_debut|date:"l d F Y"}} au {{s.date_fin|date:"l d F Y"}}{% endif %}' href="{{ s.get_absolute_url }}">[{{s.date_debut|date:"d/m"}}{% if not s.date_debut.date == s.date_fin.date %}-{{s.date_fin|date:"d/m"}}{% endif %}] {{s.titre}}</a></li>
+                    {%endif%}
+                    {%endfor%}
+                    </ul>
+                    <div class="clear"></div>
+                </div>
+				<div class="bloc forum">
+					<img width="46" height="43" class="illust" alt="" src="{{MEDIA_URL}}css/img/picto-chat.png">
+					<h2><a href="{%url groupes%}">Forum</a> Derniers sujets</h2>
+					<ul>
+					{%for m in latestmessages%}
+				        <li><a title='le {{ m.date_publication.date|date:"l d F Y" }} &agrave; {{ m.date_publication.time }}' href="{{ m.thread.get_absolute_url }}">{{m.thread.titre}}</a> <span class="description">(<a title='le {{ m.date_publication.date|date:"l d F Y" }} &agrave; {{ m.date_publication.time }}' href="{% url viewprofil m.auteur.pk %}">{{m.auteur.username}}</a>)</span></li>
+				    {%endfor%}
+				    </ul>
+				    <div class="clear"></div>
+			    </div>
+			    {% block newmember-intro %} {% endblock %}
+			</div>
+			{% endif %}
+			<div class="clear"></div>
+		</div>
+		{% block footer %} {% endblock %}
+	</div>
+
+	<script>
+	$(document).ready(function(){
+		$('#blocmeteo').load('{% url encartmeteo %}?date={% now "Y-m-d" %}');
+	});
+	</script>
+{% block scripts-post %}{% endblock %}
+{% loading %}
+ </div>
+ </body>
+</html>

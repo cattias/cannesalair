@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Edition de {{ sortie.titre }}{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="{{MEDIA_URL}}js/comment_textarea.js?{{MEDIA_SERIAL}}"></script>
+{% endblock %}
+
+{% block content %}
+<h2>Edition de {{ sortie.titre }}</h2>
+
+<form id="editsortieform" method="POST" action="{% url editsortie sortie.titre_slug %}">
+	{{ form.as_p }}
+	<input class="awesome green" type="submit" name="submit"  value="Valider" />
+	<input class="awesome orange" type="submit" name="preview" id="previewbtn" value="Pr&eacute;visualiser" />
+</form>
+{% endblock %}

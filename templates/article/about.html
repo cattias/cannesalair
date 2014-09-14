@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Pr&eacute;sentation du Club{% endblock %}
+
+{% block content %}
+<div class="actualite">
+	<h2 class="doc-title">{{ article.titre }}</h2>
+	<div class="doc-content">
+		<p>{{ article.contenu|safe }}</p>  
+	</div> <!-- doc-content -->
+</div>
+{% endblock %}

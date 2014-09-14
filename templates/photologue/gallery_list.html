@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load coretags %}
+{% block title %}Galeries photos{% endblock %}
+
+{% block content %}
+
+<h2>Galeries photos</h2>
+
+<p class="suggest">DEPRECATED</p>
+<p>{{galleriescount}} galeries photos</p>
+
+{% for gallery in galleries.object_list %}
+	<div class="newsblock{% ifequal forloop.counter 1 %} first{% endifequal %}">
+		<h3 class="title">
+	        <a title="{{ gallery.title }}" href="{{ gallery.get_absolute_url }}">{{ gallery.title }}</a>
+	    </h3>
+	    
+	    <div class="meta">
+	    	<span class="metafirst">
+	    	{{ gallery.description }}
+	    	</span>
+	    </div>
+	    <div class="texte"><p>
+	    {% for photo in gallery.sample|slice:sample_size %}
+	        <a href="{{ photo.get_absolute_url }}"><img src="{{ photo.get_thumbnail_url }}" alt="{{ photo.title }}"/></a>
+	    {% endfor %}
+	    </p></div>
+	</div>
+{% endfor %}
+
+{% pagination_entry paginator galleries %}
+
+{% endblock %}

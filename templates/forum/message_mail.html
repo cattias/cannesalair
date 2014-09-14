@@ -1,0 +1,8 @@
+{% load preferencestags %}
+<p>Bonjour {{ profil.username }},</p>
+{% load preferencestags %}
+<p>Vous recevez ce mail car vous suivez la discussion '{{ message.thread.titre }}' sur le forum '{{ message.thread.forum.groupe.titre }} / {{ message.thread.forum.titre }}' des Cannes A L'air.</p>
+<p><strong>{{ message.auteur.username }}</strong> a dit sur <a href="http://{{ domain }}{{ message.thread.get_absolute_url }}">{{ message.thread.titre }}</a> :<br>
+{{ message.contenu|safe }}</p>
+<p>Vous pouvez demander &agrave; ne plus &ecirc;tre notifi&eacute; <a href="http://{{ domain }}{% url unsubscribethread message.thread.titre_slug %}">ici</a>.</p>
+<p>Merci d'utiliser notre site.<br> - L'&eacute;quipe des {% tp "site" "name_short" %} -</p>

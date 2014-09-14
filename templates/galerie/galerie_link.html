@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Ajout d'une galerie{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="{{MEDIA_URL}}js/comment_textarea.js?{{MEDIA_SERIAL}}"></script>
+{% endblock %}
+
+{% block content %}
+<h2>R&eacute;f&eacute;rencement d'une galerie Imgur existante</h2>
+
+<p class="warn">
+Le but de cette page est de permettre le r&eacute;f&eacute;rencement d'une galerie d'images disponible sur le site <a href="http://imgur.com">imgur</a>.
+</p>
+
+<form id="linkgalerieform" method="POST" action="{% url linkgalerie %}">
+    {{ form.as_p }}
+	<input class="awesome green" type="submit" name="submit"  value="Ajouter" />
+</form>
+
+{% endblock %}

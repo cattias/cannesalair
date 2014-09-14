@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Mon Profil{% endblock %}
+
+{% block content %}
+<div id="profil" class="profil">
+    <img class="avatar right" alt="" src="{{user.get_profile.get_avatar_url}}">
+	<h2>{{user.username}}</h2>
+    
+<form method="post" action="." enctype="multipart/form-data">
+	<h3>Mon avatar</h3>
+	{{avatarform.as_p}}
+	<p><label for="id_avatardelete">Cliquez ici pour effacer votre avatar enregistr&eacute;:</label> <a id="id_avatardelete" href="{% url deleteavatar %}">Suppression de mon avatar</a></p>
+	<h3>Mon compte</h3>
+    {{userform.as_p}}
+	<h3>Mon mot de passe</h3>
+	<p class="warn">Laissez tous les champs vides si vous ne voulez pas changer de mot de passe.</p>
+    {{passwordform.as_p}}
+	<h3>Mes donn&eacute;es personnelles</h3>
+    {{profilform.as_p}}
+
+	<p><input class="awesome green" value="Valider" type="submit"> <input class="awesome blue tooltip" type="button" title="Voir mes abonnements" value="Voir mes abonnements" onclick="javascript:window.location='{% url editprofilsubscriptions %}';" /></p>
+</form>
+
+</div>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	if ($("#id_suivre_les_sorties").attr("checked") == "checked") {
+		$("#id_suivre_les_sorties_partype").prop('disabled', true);
+		$('label[for="id_suivre_les_sorties_partype"]').addClass("disabledlabel");
+	}
+	$("#id_suivre_les_sorties").click(function() {
+		if ($("#id_suivre_les_sorties").attr("checked") == "checked") {
+			$("#id_suivre_les_sorties_partype").prop('disabled', true);
+			$('label[for="id_suivre_les_sorties_partype"]').addClass("disabledlabel");
+		} else {
+			$("#id_suivre_les_sorties_partype").prop('disabled', false);
+			$('label[for="id_suivre_les_sorties_partype"]').removeClass("disabledlabel");
+		}
+	});
+});
+</script>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Ajout d'un article{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="{{MEDIA_URL}}js/comment_textarea.js?{{MEDIA_SERIAL}}"></script>
+{% endblock %}
+
+{% block content %}
+<h2>Ajout d'un article</h2>
+
+<p class="warn">
+Commencez la r&eacute;daction de l'article avec un petit paragraphe (en passant &agrave; la ligne pour la suite de l'article) qui r&eacute;sume son contenu.<br>En effet ce premier paragraphe sera ensuite r&eacute;utilis&eacute; comme aper&ccedil;u du contenu de l'article.
+</p>
+
+<form id="addarticleform" method="POST" action="{% url addarticle %}">
+    {{ form.as_p }}
+	<input class="awesome green" type="submit" name="submit"  value="Ajouter" />
+	<input class="awesome orange" type="submit" name="preview" id="previewbtn" value="Pr&eacute;visualiser" />
+</form>
+
+{% endblock %}

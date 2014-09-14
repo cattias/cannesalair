@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load preferencestags %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block content %}
+
+<h2>Devenez membre des {% tp "site" "name_short" %}</h2>
+<h3>Inscription</h3>
+
+<form method="post" action=".">
+	<p>Etre inscrit sur le site {% tp "site" "name2" %} vous permet de participer &agrave; la communaut&eacute;, d'&ecirc;tre mis au courant des derni&egrave;res sorties propos&eacute;es &#8230;</p>
+	{{form.as_p}}
+	<p><input class="awesome green" value="Valider" type="submit"></p>
+</form>  
+  
+{% endblock %}

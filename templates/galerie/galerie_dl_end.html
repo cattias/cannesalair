@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load commenttags %}
+{% block title %}Download Galerie{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="{{MEDIA_URL}}js/dl_galerie.js?{{MEDIA_SERIAL}}"></script>
+{% endblock %}
+
+{% block content %}
+<h2><a href="{{galerie.get_absolute_url}}">{{ galerie.titre }}</a></h2>
+
+<div class="auteur ">
+   	{{ galerie.auteur.get_profile.get_html_avatar|safe }}
+	<p>Galerie photos par <a title="{{galerie.auteur.username}}" href="{% url viewprofil user_pk=galerie.auteur.pk %}">{{ galerie.auteur.username }}</a>
+	<span class="edit"></span>
+	<br>
+	<span class="meta">
+		Le {{ galerie.date_publication.date|date:"l d F Y" }} &agrave; {{ galerie.date_publication.time }}
+    </span>
+	</p>
+</div>
+<div class="auteur-end"></div>
+
+<div class="embed" id="offsite">
+<h2>Le t&eacute;l&eacute;chargement est en cours de pr&eacute;paration ...</h2>
+<h2>Vous receverez une notification par mail une fois que celui ci est pr&ecirc;t.</h2>
+<h3>Au cas o&ugrave; vous ne recevriez aucun email vous pouvez r&eacute;cup&eacute;rer votre zip <a href="{{settings.TODOWNLOAD_URL}}">ici</a>.</h3>
+</div>
+
+<div id="validation">
+<a class="awesome green" href="{{galerie.get_absolute_url}}">Retour &agrave; la galerie photos ...</a>
+</div>
+
+{% endblock %}

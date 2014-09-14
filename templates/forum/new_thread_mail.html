@@ -1,0 +1,7 @@
+{% load preferencestags %}
+<p>Bonjour {{ profil.username }},</p>
+<p>Vous recevez ce mail car vous avez demand&eacute; &agrave; &ecirc;tre notifi&eacute; lorsqu'un nouveau sujet de discussion est cr&eacute;&eacute; sur le forum des Cannes A L'air.</p>
+<p><strong>{{ message.auteur.username }}</strong> a dit sur <a href="http://{{ domain }}{{ message.thread.get_absolute_url }}">{{ message.thread.titre }}</a> :<br>
+{{ message.contenu|safe }}</p>
+<p>Vous pouvez demander &agrave; ne plus &ecirc;tre notifi&eacute; <a href="http://{{ domain }}{% url editprofil %}">ici</a>.</p>
+<p>Merci d'utiliser notre site.<br> - L'&eacute;quipe des {% tp "site" "name_short" %} -</p>

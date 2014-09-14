@@ -1,0 +1,20 @@
+{% if allmessages %}
+<div class="nav_box">
+	<div class="nav_header">
+		<span id="arrow_message_nav" class="link arrowdown"></span>
+		<a href="{% url groupes %}">Derniers messages</a>
+	</div>
+	<div class="nav_innerbox" id="message_nav_inner_box">
+{% for m in allmessages %}
+	<div onclick="javascript:window.location=&quot;{{ m.thread.get_absolute_url }}?page=last#message{{m.pk}}&quot;; return false;" 
+		 {% ifequal m.thread.pk t.pk %}
+		 	 class="nav_item selected"
+		 {% else %}
+		 	 class="nav_item unselected"
+		 {% endifequal %}
+		 title="par {{m.auteur.username}} le {{ m.date_publication.date|date:'l d F Y' }} &agrave; {{ m.date_publication.time }} ({{m.thread.forum.titre}})"><a href="{{ m.thread.get_absolute_url }}?page=last#message{{m.pk}}">{{m.thread.titre}}</a>
+	</div>
+{% endfor %}
+	</div>
+</div>
+{% endif %}

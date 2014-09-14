@@ -1,0 +1,4 @@
+    <tr onclick="javascript:window.location=&quot;{% url articles %}?view={{view}}{% if tag %}&amp;tag={{tag}}{% endif %}&quot;; return false;"{% if selected %} class="selected"{% else %} class="unselected"{% endif %}>
+     <td class="summary {{level}}"><a href="{% url articles %}?view={{view}}{% if tag %}&amp;tag={{tag}}{% endif %}">{{text}}</a></td>
+     <td>{% if show_count %}{{count}}{% endif %}</td>
+    </tr>

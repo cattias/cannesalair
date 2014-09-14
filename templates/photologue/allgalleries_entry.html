@@ -1,0 +1,4 @@
+    <tr onclick="javascript:window.location=&quot;{% url pl-gallery-list 1 %}&quot;; return false;"{% if selected %} class="selected"{% else %} class="unselected"{% endif %}>
+     <td class="summary main-item"><a href="{% url pl-gallery-list 1 %}">Toutes les galeries</a></td>
+     <td>{% if show_count %}{{count}}{% endif %}</td>
+    </tr>

@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% load preferencestags %}
+{% load commenttags %}
+{% load sortietags %}
+{% load galerietags %}
+{% block title %}{{ previ.get_full_titre }}{% endblock %}
+
+{% block css %}
+	<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block content %}
+
+<h2 class="doc-title">
+	{{ previ.get_full_titre }}{% if not urlretour %}{% if user == previ.auteur or user.is_superuser %} <a title="Supprimer {{previ.get_titre}}" href="{% url deleteprevi previ.pk %}"><img alt="" src="{{MEDIA_URL}}images/icon_deletelink.gif?{{MEDIA_SERIAL}}"></a>{% endif %}{% endif %}
+</h2>
+
+   <div class="auteur ">
+   	{{ previ.auteur.get_profile.get_html_avatar|safe }}
+	<p>Pr&eacute;vision m&eacute;t&eacute;o par <a title="{{previ.auteur.username}}" href="{% url viewprofil user_pk=previ.auteur.pk %}">{{ previ.auteur.username }}</a> pour le {{previ.date_previ|date:"l d F Y"}}
+	<span class="edit">{% if canbeedited %}<a title="Editer la pr&eacute;vision" href="{% url editprevi previ.pk %}">{% endif %}<img alt="Editer la pr&eacute;vision" src="{{MEDIA_URL}}css/img/picto-edit.png" />{% if canbeedited %}</a>{% endif %}</span>
+   	<span class="meta">
+   		<p>faite le {{ previ.date_creation|date:"l d F Y" }} &agrave; {{ previ.date_creation|time:"H:i" }}</p>
+   	</span>
+   	</p>
+   </div>
+   <div class="auteur-end"></div>
+
+{% if user == previ.auteur or user.is_superuser and not urlretour %}
+<p class="suggestbottom right">
+	<span title="Ajouter une note par activit&eacute;" class="awesome tooltip green" onclick="javascript:showpopupnote();">Ajouter une note par activit&eacute;</span>
+	<div title="Ajout d'une note par activit&eacute;" id="noteformdivid" style="display: none;">
+		<form id="noteformid" method="POST" action="{{previ.get_absolute_url}}">
+			{{ noteform.as_p }}
+			<input class="awesome small green" type="submit" name="submit" value="Ajout" />
+		</form>
+	</div>
+</p>
+{% endif %}
+
+<div id="description" class="doc-content">
+	<h3>Notes</h3>
+	<ul>
+	{%for note in previ.prevision_notes_set.all%}
+		<li>{{note}}{% if user == previ.auteur or user.is_superuser and not urlretour %} <a title="Supprimer la note" href="{{previ.get_absolute_url}}?action=delete&pk={{note.pk}}"><img alt="" src="{{MEDIA_URL}}images/icon_deletelink.gif?{{MEDIA_SERIAL}}"></a>{% endif %}</li>
+	{%endfor%}
+	</ul>
+</div>
+
+
+<div id="description" class="doc-content">
+	<h3>Description</h3>
+	<p>{{ previ.description|safe }}</p>  
+</div>
+
+{% if previ.sources %}
+<div id="description" class="doc-content">
+	<h3>Sources</h3>
+	<p>{{ previ.sources|safe }}</p>  
+</div>
+{% endif %}
+
+{% if previ.annexe %}
+<div id="description" class="doc-content">
+	<h3>Annexe</h3>
+	<p>{{ previ.annexe|safe }}</p>  
+</div>
+{% endif %}
+
+{% if urlretour %}
+<div id="commentaires">
+<form method="POST" action="{{urlretour}}" >
+	<input type="hidden" name="editpreview" value="True" />
+	<input type="hidden" name="auteur" value="{{previ.auteur.pk}}" />
+	<input type="hidden" name="description" value="{{previ.description}}" />
+	<input type="hidden" name="annexe" value="{{previ.annexe}}" />
+	<input type="hidden" name="sources" value="{{previ.sources}}" />
+	<input type="hidden" name="date_previ" value="{{previ.date_previ|date:'Y-m-d'}}" />
+ 	<input class="awesome orange" type="submit" value="Retour &agrave; l'&eacute;dition" />
+</form>
+</div>
+{% else %}
+{% comments_entry 'previ' previ.pk previ.comments.all %}
+{% endif %}
+
+<script>
+function showpopupnote() {
+	$('#noteformdivid').dialog({
+		bgiframe : true,
+		width : 800,
+		modal : true,
+		autoOpen : false
+		});
+	$('#noteformdivid').dialog('open');
+	return true;
+}
+
+$(document).ready(function(){
+	{% if noteform.errors %}showpopupnote();{% endif %}
+});
+</script>
+
+{% endblock %}

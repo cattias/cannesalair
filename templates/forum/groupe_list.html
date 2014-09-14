@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load forumtags %}
+{% block title %}Forum{% endblock %}
+
+{% block content %}
+<ul class="newslist">
+ {% for g in groupes %}
+<h2>{{ g.titre }}</h2>
+ 	{% for f in g.groupe_forum_set.all|dictsort:"ordre" %} 
+	<li class="{% cycle 'even' 'odd' %}{% ifequal forloop.counter 1 %} first{% endifequal %}">
+ 	{% forums_entry f %} 
+	</li>
+ 	{% endfor %}
+ {% endfor %}
+</ul>
+{% endblock %}

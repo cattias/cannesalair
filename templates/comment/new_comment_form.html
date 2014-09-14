@@ -1,0 +1,8 @@
+<form id="newcommentform" method="POST" action="{% url newcomment type=type pk=pk %}">
+ <table>
+    <tbody>
+    {{ form }}
+    </tbody> 
+ </table>
+ <input type="submit" value="Submit comment" />
+</form>

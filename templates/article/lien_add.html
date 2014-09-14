@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load djblets_deco %}
+{% load djblets_utils %}
+{% load articletags %}
+{% block title %}Ajout de lien{% endblock %}
+
+{% block content %}
+<div class="boxmargin">
+{% box "loginform" %}
+<form id="addlienform" method="POST" action="{% url addlien %}">
+ <h1 class="title">Ajout de lien</h1>
+ <div class="main">
+ {% if error %}
+ {%  errorbox %}
+    {{ error }}
+ {%  enderrorbox %}
+ {% endif %}
+<table>
+    <tbody>
+    {{ form }}
+    </tbody>
+</table>
+ </div>
+ <input type="submit" value="Ajouter" />
+</form>
+</div>
+{% endbox %}
+{% endblock %}

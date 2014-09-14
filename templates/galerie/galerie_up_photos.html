@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load commenttags %}
+{% block title %}Titre des photos{% endblock %}
+
+{% block css %}
+{% endblock %}
+{% block scripts %}
+{% endblock %}
+
+{% block content %}
+<h2><a href="{{galerie.get_absolute_url}}">{{ galerie.titre }}</a>{% if canbeedited %} <a onclick="javascript:showModalLoading();" title="Supprimer {{galerie.titre}}" href="{% url deletegalerie galerie.titre_slug %}"><img src="{{MEDIA_URL}}images/icon_deletelink.gif?{{MEDIA_SERIAL}}"></a>{% endif %}</h2>
+
+<div class="auteur ">
+   	{{ galerie.auteur.get_profile.get_html_avatar|safe }}
+	<p>Galerie photos par <a title="{{galerie.auteur.username}}" href="{% url viewprofil user_pk=galerie.auteur.pk %}">{{ galerie.auteur.username }}</a>
+	<span class="edit">{% if canbeedited %}<a title="Editer la galerie" href="{% url editgalerie galerie.titre_slug %}">{% endif %}<img alt="Editer la galerie" src="{{MEDIA_URL}}css/img/picto-edit.png" />{% if canbeedited %}</a>{% endif %}</span>
+	<br>
+	<span class="meta">
+		Le {{ galerie.date_publication.date|date:"l d F Y" }} &agrave; {{ galerie.date_publication.time }}
+    </span>
+	</p>
+</div>
+<div class="auteur-end"></div>
+
+<div class="embed" id="offsite">
+<form id="updatephotosform" method="POST" action="{% url updatephotos galerie.titre_slug %}">
+<ul class="nostyle markItUp">
+{% for image in galerie.photos_set.all %}
+	<li class="imagelistli">
+			<img src="{{image.get_bigsquare_url}}" />
+			<input type="text" name="titre_{{image.pk}}" class="input-imagetitle input-maxi" value="{% if image.titre %}{{image.titre}}{% else %}Titre{% endif %}">
+			<textarea name="description_{{image.pk}}" class="input-imagedescription input-maxi">{% if image.description %}{{image.description}}{% else %}Description{% endif %}</textarea>
+			<input type="hidden" name="image" value="{{image.pk}}">
+	</li>
+{% endfor %}
+</ul>
+<input class="awesome green" type="submit" name="submit" value="Valider" />
+</form>
+</div>
+
+<script>
+$(document).ready(function() {
+	$(".input-imagetitle").focus(function() {
+		var currVal = $(this).val();
+		if (currVal == "Titre"){
+			$(this).val("");
+		}
+	});
+	$(".input-imagetitle").blur(function() {
+		var currVal = $(this).val();
+		if (currVal == ""){
+			$(this).val("Titre");
+		}
+	});
+
+	$(".input-imagedescription").focus(function() {
+		var currVal = $(this).val();
+		if (currVal == "Description"){
+			$(this).val("");
+		}
+	});
+	$(".input-imagedescription").blur(function() {
+		var currVal = $(this).val();
+		if (currVal == ""){
+			$(this).val("Description");
+		}
+	});
+});
+</script>
+
+{% endblock %}

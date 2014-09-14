@@ -1,0 +1,27 @@
+{% extends 'root.base.html' %}
+
+{% block newmember-intro %}
+<div class="bloc newmember-intro">
+	<a href="http://federation.ffvl.fr/" title="F&eacute;d&eacute;ration Fran&ccedil;aise de Vol Libre"><img class="illust" src="http://federation.ffvl.fr/sites/ffvl.fr/files/images/logo-FFVL_10.jpg" alt="FFVL" /></a>
+	<img src="{{MEDIA_URL}}images/logo_seul_50px.png" alt="" class="illust">
+	<h2>Les Cannes A L'air, <span>C'est quoi ?</span></h2>
+	<p>Les Cannes A L'air est un club du CE d'une entreprise des Alpes Maritimes, affili&eacute; &agrave; la <a href="http://federation.ffvl.fr/" title="F&acute;d&eacute;ration Fran&ccedil;aise de Vol Libre">FFVL</a>, qui rassemble des passionn&eacute;s autour des activit&eacute;s de glisse a&eacute;riennes comme le parapente, le snowkite et le speed-riding <a href="{% url aboutus %}" accesskey="0">(en savoir plus...)</a></p>
+</div>
+{% endblock %}
+
+{% block footer %}
+<div id="footer"{% if full %} class="full"{% endif %}>
+<ul id="footer-links">
+	<li>Carnets d'Aventures : <a href="http://www.expemag.com/">Le magazine du voyage nature</a></li>
+	<li>Au Gr&eacute; de l'Air : <a href="http://www.augredelair.fr/">Club de parapente de Gr&eacute;oli&egrave;res</a></li>
+	<li><a href="http://federation.ffvl.fr/" title="F&eacute;d&eacute;ration Fran&ccedil;aise de Vol Libre"><img src="http://federation.ffvl.fr/sites/ffvl.fr/files/images/logo-FFVL_10.jpg" alt="FFVL" /></a></li>
+</ul>
+</div>
+<div id="footer-menu">
+<ul>
+	<li><a href="{% url contactus %}" accesskey="7" title="Contactez-nous">Contactez-nous</a></li>
+	<li><a href="{% url aboutus %}" accesskey="0" title="Pr&eacute;sentation du Club">Pr&eacute;sentation du Club</a></li>
+	<li class="gopagetop"><a href="#evitement">Haut&nbsp;de&nbsp;page <img src="{{MEDIA_URL}}css/img/ico-up.png" alt=""></a></li>
+</ul>
+</div>
+{% endblock %}

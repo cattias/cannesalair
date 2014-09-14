@@ -1,0 +1,8 @@
+{% load coretags %}
+{% load preferencestags %}
+<p>Bonjour {{ profil.username }},</p>
+<p>Vous recevez ce mail car vous avez demand&eacute; &agrave; &ecirc;tre notifi&eacute; lorsqu'une nouvelle galerie est publi&eacute;e sur le site des {% tp "site" "name2" %}.</p>
+<p><strong>{{ galerie.auteur.username }}</strong> a publi&eacute; la galerie <a href="http://{{ domain }}{{ galerie.get_absolute_url }}">{{ galerie.titre }}</a></p>
+<a class="readnext" title="Voir la galerie" href="http://{{ domain }}{{ galerie.get_absolute_url }}">Voir la galerie &raquo;</a>
+<p>Vous pouvez demander &agrave; ne plus &ecirc;tre notifi&eacute; <a href="http://{{ domain }}{% url editprofil %}">ici</a>.</p>
+<p>Merci d'utiliser notre site.<br> - L'&eacute;quipe des {% tp "site" "name_short" %} -</p>

@@ -1,0 +1,5 @@
+{% load preferencestags %}
+<p>Bonjour {{ profil.username }},</p>
+<p><strong>{{ user.username }}</strong> a modifi&eacute; sa participation &agrave; <a href="http://{{ domain }}{{ sortie.get_absolute_url }}">{{ sortie.titre }}</a></p>
+<p>Vous pouvez demander &agrave; ne plus &ecirc;tre notifi&eacute; <a href="http://{{ domain }}{% url unsubscribesortie sortie.titre_slug %}">ici</a>.</p>
+<p>Merci d'utiliser notre site.<br> - {% tp "site" "sign" %} -</p>

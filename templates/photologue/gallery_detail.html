@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}{{ gallery.title }}{% endblock %}
+
+{% block content %}
+
+<h2>{{ gallery.title }}</h2>
+<h3>Publi&eacute;e le {{ gallery.date_added.date|date:"l d F Y" }}</h3>
+{% if gallery.description %}<p>{{ gallery.description }}</p>{% endif %}
+
+<div class="photo-gallery">
+    {% for photo in gallery.public %}
+    <a href="{{ photo.get_absolute_url }}"><img src="{{ photo.get_thumbnail_url }}" alt="{{ photo.title }}"/></a>
+    {% endfor %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,10 @@
+[
+  {
+    "model": "sortie.sortieType",
+    "pk": 1,
+    "fields": {
+      "name": "sortie",
+      "date_creation": "2012-01-01 00:00"
+    }
+  }
+]

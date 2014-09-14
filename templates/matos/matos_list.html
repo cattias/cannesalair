@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load djblets_deco %}
+{% block title %}Matos{% endblock %}
+
+{% block content %}
+<div class="boxmargin">
+{% box "loginform" %}
+	{{datagrid.render_listview}}
+{% endbox %}
+</div>
+{% endblock %}

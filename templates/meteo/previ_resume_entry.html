@@ -1,0 +1,17 @@
+    {{ previ.auteur.get_profile.get_html_illustration|safe }}
+	<span class="titre">
+		<a title="Pr&eacute;vision pour le {{ previ.date_previ|date:"l d F Y" }}" href="{{ previ.get_absolute_url }}">
+			Pr&eacute;vision pour le {{ previ.date_previ|date:"l d F Y" }}
+		</a>
+	</span>
+	<span class="meta">
+		faite le {{ previ.date_creation|date:"l d F Y" }} &agrave; {{ previ.date_creation|time:"H:i" }} par {{ previ.auteur.username }}, <a href="{{ previ.get_absolute_url }}#commentaires" title="Commentaires" class="tooltip">{{previ.comments.all.count}} commentaires</a>
+		<br>{{previ.prevision_notes_set.all|join:", "}}
+	</span>
+	<p style="clear: both; margin-bottom: 0;"><strong>Pr&eacute;vision</strong> : </p>
+	<span class="safep">{{previ.description|safe}}</span>
+	{% if previ.sources %}
+	<p style="clear: both; margin-bottom: 0;"><strong>Sources</strong> : </p>
+	<span class="safep">{{previ.sources|safe}}</span>
+	{% endif %}
+	

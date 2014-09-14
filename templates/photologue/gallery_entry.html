@@ -1,0 +1,8 @@
+	<div onclick="javascript:window.location=&quot;{% url pl-gallery g.title_slug %}&quot;; return false;"
+		 {% if selected %}
+		 	 class="nav_item selected"
+		 {% else %}
+		 	 class="nav_item unselected"
+		 {% endif %}>
+		 <a href="{% url pl-gallery g.title_slug %}">{{g.title}}{% if show_count %} ({{count}}){% endif %}</a>
+	</div>

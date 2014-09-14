@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load preferencestags %}
+{% block title %}Ajout d'une galerie{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="{{MEDIA_URL}}js/comment_textarea.js?{{MEDIA_SERIAL}}"></script>
+{% endblock %}
+
+{% block content %}
+<h2>Ajout d'une nouvelle galerie</h2>
+
+<p class="warn">
+Le but de cette page est de permettre de cr&eacute;er une galerie d'images sur le compte <a href="http://imgur.com">imgur</a> des {% tp "site" "name_short" %}.
+</p>
+{% if error %}
+<p class="error">
+{{error|safe}}
+</p>
+{% endif %}
+<form id="addgalerieform" method="POST" action="{% url addgalerie %}">
+    {{ form.as_p }}
+	<input class="awesome green" type="submit" name="submit"  value="Ajouter" />
+</form>
+
+{% endblock %}

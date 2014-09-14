@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Connectez-vous{% endblock %}
+
+{% block content %}
+<h2>Nouveau ?</h2>
+<p>Si vous n'avez pas encore de compte, vous pouvez <a href="{% url signup %}">devenir membre</a>.</p>
+
+<h2>Connectez-vous</h2>
+<p><a href="{% url resetpassword %}">Identifiants oubli&eacute;s ?</a></p>
+<form method="post" action=".">
+	{% if error %}
+	<ul class="errorlist"><li>{{error}}</li></ul>
+	{% endif %}
+	<p><input type="hidden" name="next_page" value="{{next_page}}" /></p>
+	<p><input type="hidden" name="next_query" value="{{next_query}}" /></p>
+	<p><label for="id_username">Pseudo :</label><input type="text" name="username" id="id_username" /></p>
+	<p><label for="id_password">Mot de passe :</label><input type="password" name="password" id="id_password" /></p>
+	<p><input class="awesome green" value="Valider" type="submit"></p>
+</form>
+
+{% endblock %}

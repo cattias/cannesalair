@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load articletags %}
+{% block title %}Nouvelle discussion{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="{{MEDIA_URL}}js/comment_textarea.js?{{MEDIA_SERIAL}}"></script>
+{% endblock %}
+
+{% block content %}
+<h2>Ajout d'une discussion</h2>
+<form id="newthreadform" method="POST" action="{% url newthread forum.titre_slug %}">
+    {{ threadform.as_p }}
+    {{ messageform.as_p }}
+	<input class="awesome green" type="submit" name="submit"  value="Ajouter" />
+	<input class="awesome orange" type="submit" name="preview" id="previewbtn" value="Pr&eacute;visualiser" />
+</form>
+
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Contact{% endblock %}
+
+{% block content %}
+
+<h2>Contact</h2>
+<p class="warn">Vous pouvez choisir de contacter le Bureau ou le Conseil d'Administration ou bien le Webmaster.</p>
+
+<form action="." method="post">
+{{form.as_p}}
+<p><input type="submit" class="awesome green" value="Envoyer"></p>
+</form>
+
+{% endblock %}

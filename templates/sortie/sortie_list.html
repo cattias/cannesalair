@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load sortietags %}
+{% block title %}Activit&eacute;s{% endblock %}
+
+{% block content %}
+<p class="pagination">
+	<a{% if view == "all" %} class="active"{% endif %} href="{% url sorties %}?view=all">Toutes</a>
+{% for y in years %}
+	<a{% if year == y %} class="active"{% endif %} title="{{y}}" href="{% url sorties %}?year={{y}}">{{y}}</a>
+{% endfor %}
+</p>
+
+{% if sortiesavenirfiltered %}
+<h2>Liste des activit&eacute;s{% if cats %} {{cats|join:", "}}{% endif %} &agrave; venir{% if auteur %} propos&eacute;e par {{auteur.username}}{% endif %}</h2>
+{% endif %}
+<p class="suggest right"><a class="awesome blue" href="{% url addsortie %}">Proposer une activit&eacute;</a></p>
+{% if sortiesavenirfiltered %}
+<p><a href="{% url feedsorties 'latest' %}"><img alt="" src="{{MEDIA_URL}}css/img/rss.gif"> S'abonner au flux RSS</a></p>
+<p>{{sortiesavenirfilteredcount}} activit&eacute;s &agrave; venir</p>
+
+<ul class="newslist">
+ {% for sortie in sortiesavenirfiltered %}
+	<li class="{% cycle 'even' 'odd' %}{% ifequal forloop.counter 1 %} first{% endifequal %}">
+ 	{% sortie_resume_entry sortie "green" %}
+ 	</li>
+ {% endfor %}
+</ul>
+{% endif %}
+
+<h2>Liste des activit&eacute;s{% if cats %} {{cats|join:", "}}{% endif %} pass&eacute;es{% if auteur %} propos&eacute;e par {{auteur.username}}{% endif %}</h2>
+
+<p>{{sortiespasseescount}} derni&egrave;res activit&eacute;s</p>
+
+<ul class="newslist">
+ {% for sortie in sortiespassees %}
+	<li class="{% cycle 'even' 'odd' %}{% ifequal forloop.counter 1 %} first{% endifequal %}">
+ 	{% sortie_resume_entry sortie "orange" %}
+ 	</li>
+ {% endfor %}
+</ul>
+
+<p class="pagination">
+	<a{% if view == "all" %} class="active"{% endif %} href="{% url sorties %}?view=all">Toutes</a>
+{% for y in years %}
+	<a{% if year == y %} class="active"{% endif %} title="{{y}}" href="{% url sorties %}?year={{y}}">{{y}}</a>
+{% endfor %}
+</p>
+
+{% endblock %}

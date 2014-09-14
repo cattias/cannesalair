@@ -1,0 +1,6 @@
+
+{% if p.gravatarurl %}
+    <img src="{{ p.gravatarurl }}" /> 
+{% else %} {% if p.avatar %} 
+    <img src="{{ p.avatar.get_avatar_url }}" alt="{{ p.avatar.title }}" /> 
+{% endif %} {% endif %}

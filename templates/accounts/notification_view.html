@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Tes notifications{% endblock %}
+
+{% block content %}
+<p class="suggest right"><a class="awesome blue" href="{% url markasreadnotification %}">Marquer les notifications comme lues</a></p>
+<div id="notifications">
+    {% for item in notifications %}
+    <h2>{{item.0|date:"l d F Y"}}</h2>
+    <ul>
+    	{% for n in item.1 %}
+    	<li>{{n.to_html|safe}}</li>
+    	{% endfor %}
+    </ul>
+    {% endfor %}
+</div>
+
+{% if user.get_profile.auto_refresh_notif %}
+{% if not norefresh %}
+<script>
+    $(document).ready(function() {
+    	setTimeout("$('body').load('{% url markasreadnotification %}');", 5000);
+    });
+</script>
+{% endif %}
+{% endif %}
+
+{% endblock %}

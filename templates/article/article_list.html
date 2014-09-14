@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load coretags %}
+{% load articletags %}
+
+{% block title %}Articles{% endblock %}
+
+{% block content %}
+<h2>Liste des articles{% if tags %} {{tags|join:", "}}{% endif %}{% if auteur %} par {{auteur.username}}{% endif %}</h2>
+
+{% if perms.article.add_article %}
+<p class="suggest right"><a class="awesome blue" href="{% url addarticle %}">Ecrire un nouvel article</a></p>
+{% endif %}
+
+<p><a href="{% url feedarticles 'latest' %}"><img alt="" src="{{MEDIA_URL}}css/img/rss.gif"> S'abonner au flux RSS</a></p>
+<p>{{articlescount}} articles en ligne{% if year %} pour l'ann&eacute;e {{year}}{% endif %}</p>
+
+<ul class="newslist">
+ {% for article in articles %}
+	<li class="{% cycle 'even' 'odd' %}{% ifequal forloop.counter 1 %} first{% endifequal %}">
+    {{ article.auteur.get_profile.get_html_illustration|safe }}
+	<span class="titre"><a title="{{ article.titre }}" href="{{ article.get_absolute_url }}">{{ article.titre }}</a></span>
+	<span class="meta">
+		Le {{ article.date_publication.date|date:"l d F Y" }} &agrave; {{ article.date_publication.time }} par {{ article.auteur.username }}, <a href="{{ article.get_absolute_url }}#commentaires">{{article.comments.all.count}} commentaires</a>
+   		{% article_tags_entry article %}
+	</span>
+	</li>
+ {% endfor %}
+</ul>
+
+<p class="pagination">
+{% for y in years %}
+	<a{% if year == y %} class="active"{% endif %} title="{{y}}" href="{% url articles %}?year={{y}}">{{y}}</a>
+{% endfor %}
+</p>
+
+{% endblock %}

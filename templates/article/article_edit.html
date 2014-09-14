@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Edition de {{ article.titre }}{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="{{MEDIA_URL}}js/comment_textarea.js?{{MEDIA_SERIAL}}"></script>
+{% endblock %}
+
+{% block content %}
+<h2>Modification de l'article "{{ article.titre }}"</h2>
+
+<form id="editarticleform" method="POST" action="{% url editarticle article.titre_slug %}">
+	{{ form.as_p }}
+	<input class="awesome green" type="submit" name="submit"  value="Valider" />
+	<input class="awesome orange" type="submit" name="preview" id="previewbtn" value="Pr&eacute;visualiser" />
+</form>
+
+{% endblock %}

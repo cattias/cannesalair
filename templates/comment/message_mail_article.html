@@ -1,0 +1,6 @@
+{% load preferencestags %}
+<p>Bonjour {{ profil.username }},</p>
+<p><strong>{{ comment.auteur.username }}</strong> a comment&eacute; sur <a href="http://{{ domain }}{{ article.get_absolute_url }}#commentaires-posting">{{ article.titre }}</a> :<br>
+{{ comment.contenu|urlize|safe|linebreaksbr }}</p>
+<p>Vous pouvez demander &agrave; ne plus &ecirc;tre notifi&eacute; <a href="http://{{ domain }}{% url unsubscribearticle article.titre_slug %}">ici</a>.</p>
+<p>Merci d'utiliser notre site.<br> - L'&eacute;quipe des {% tp "site" "name_short" %} -</p>

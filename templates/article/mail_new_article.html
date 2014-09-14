@@ -1,0 +1,9 @@
+{% load coretags %}
+{% load preferencestags %}
+<p>Bonjour {{ profil.username }},</p>
+<p>Vous recevez ce mail car vous avez demand&eacute; &agrave; &ecirc;tre notifi&eacute; lorsqu'un nouvel article est publi&eacute; sur le site {% tp "site" "name2" %}</p>
+<p><strong>{{ article.auteur.username }}</strong> a publi&eacute; l'article <a href="http://{{ domain }}{{ article.get_absolute_url }}">{{ article.titre }}</a></p>
+<p>R&eacute;sum&eacute; : {{ article.contenu|resume|safe }}</p>
+<a class="readnext" title="Lire la suite de {{ article.titre }}" href="http://{{ domain }}{{ article.get_absolute_url }}">Lire la suite &raquo;</a>
+<p>Vous pouvez demander &agrave; ne plus &ecirc;tre notifi&eacute; <a href="http://{{ domain }}{% url editprofil %}">ici</a>.</p>
+<p>Merci d'utiliser notre site.<br> - {% tp "site" "sign" %} -</p>
