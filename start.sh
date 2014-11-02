@@ -1,5 +1,5 @@
 #!/bin/bash
 
-exec gunicorn_django -c ./gunicorn.conf.py
+exec gunicorn_django -c ../gunicorn.conf.py
 
 

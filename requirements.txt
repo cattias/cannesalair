@@ -7,5 +7,5 @@ oauth2==1.5.211
 requests==0.13.0
 MySQL_python
 South==0.7.5
-gunicorn
+gunicorn==0.14.3
 
