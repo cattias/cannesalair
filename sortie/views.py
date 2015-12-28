@@ -27,6 +27,11 @@ def list_sorties(request, template_name='sortie/sortie_list.html'):
             years.append(s.date_fin.year)
         if not s.date_debut.year in years:
             years.append(s.date_debut.year)
+    for s in sortiesavenirfiltered:
+        if not s.date_fin.year in years:
+            years.append(s.date_fin.year)
+        if not s.date_debut.year in years:
+            years.append(s.date_debut.year)
     year = request.GET.get("year", None)
 
     tags = request.GET.getlist('cat')
@@ -51,6 +56,7 @@ def list_sorties(request, template_name='sortie/sortie_list.html'):
             year = int(year)
         query = Q(date_fin__year=year) | Q(date_debut__year=year)
         sortiespassees = sortiespassees.filter(query)
+        query = Q(date_fin__year__gte=year) | Q(date_debut__year__gte=year)
         sortiesavenirfiltered = sortiesavenirfiltered.filter(query)
 
     sortiesavenirfilteredcount = sortiesavenirfiltered.count()
