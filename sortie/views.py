@@ -56,7 +56,7 @@ def list_sorties(request, template_name='sortie/sortie_list.html'):
             year = int(year)
         query = Q(date_fin__year=year) | Q(date_debut__year=year)
         sortiespassees = sortiespassees.filter(query)
-        query = Q(date_fin__year__gte=year) | Q(date_debut__year__gte=year)
+        query = Q(date_fin__year=year) | Q(date_debut__year=year) | Q(date_fin__year=year+1) | Q(date_debut__year=year+1)
         sortiesavenirfiltered = sortiesavenirfiltered.filter(query)
 
     sortiesavenirfilteredcount = sortiesavenirfiltered.count()
