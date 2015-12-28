@@ -32,6 +32,7 @@ def list_sorties(request, template_name='sortie/sortie_list.html'):
             years.append(s.date_fin.year)
         if not s.date_debut.year in years:
             years.append(s.date_debut.year)
+    years.sort(reverse=True)
     year = request.GET.get("year", None)
 
     tags = request.GET.getlist('cat')
