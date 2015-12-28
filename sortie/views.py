@@ -22,12 +22,12 @@ def list_sorties(request, template_name='sortie/sortie_list.html'):
     sortiespassees = Sortie.objects.filter(date_fin__lt=now).order_by('-date_debut')
 
     years = []
-    for s in sortiespassees:
+    for s in sortiesavenirfiltered:
         if not s.date_fin.year in years:
             years.append(s.date_fin.year)
         if not s.date_debut.year in years:
             years.append(s.date_debut.year)
-    for s in sortiesavenirfiltered:
+    for s in sortiespassees:
         if not s.date_fin.year in years:
             years.append(s.date_fin.year)
         if not s.date_debut.year in years:
